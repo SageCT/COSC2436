@@ -1,0 +1,14 @@
+char
+head
+c
+remove tail
+remove tail
+h
+w
+o
+p
+e
+remove head
+remove tail
+remove head
+r

@@ -1,0 +1,6 @@
+Sort (score)
+Sort (username)
+Remove (id:8364)
+Remove (username:groot)
+Sort (score)
+Remove (grade:A)

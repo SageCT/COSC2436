@@ -1,0 +1,9 @@
+int
+tail
+23
+2 
+remove head
+0
+45
+remove tail
+15

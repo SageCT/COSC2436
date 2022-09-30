@@ -1,0 +1,1 @@
+[id:1234;username:r;score:85;grade:B]

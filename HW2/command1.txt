@@ -1,0 +1,4 @@
+Add (0) [id:6612;username:nathan;score:67;grade:D]
+Add (1) [id:1765;username:john;score:82;grade:B]
+Remove (username:mindy)
+Sort (id)

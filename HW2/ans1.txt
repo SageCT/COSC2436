@@ -1,0 +1,3 @@
+[id:1234;username:john;score:100;grade:A]
+[id:6612;username:nathan;score:67;grade:D]
+[id:6734;username:bob;score:79;grade:C]

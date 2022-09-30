@@ -1,0 +1,6 @@
+Add (3) [id:9274;username:strange;score:89;grade:B]
+Add (6) [id:2639;username:domino;score:73;grade:C]
+Remove (grade:F)
+Add (10) [id:8392;username:sonic;score:57;grade:F]
+Remove (id:7346)
+Remove (id:1993)

@@ -1,0 +1,11 @@
+Add (1) [id:3248;username:snorlax;score:88;grade:B]
+Add (2) [id:2749;username:mew;score:57;grade:F]
+Add (0) [id:7583;username:eevee;score:92;grade:A]
+Add (1) [id:9128;username:squirtle;score:34;grade:F]
+Add (2) [id:9384;username:rattata;score:76;grade:C]
+Sort (score)
+Add (3) [id:6457;score:76;grade:C]
+Add (3) [id:9128;username:squirtle;score:89;grade:B]
+Add (3) [id:2474;username:meowth;score:99;grade:A]
+Sort (grade)
+Sort (id)

@@ -1,0 +1,18 @@
+Add (1) [id:3248;username:snorlax;score:88;grade:B]
+Add (2) [id:2749;username:mew;score:57;grade:F]
+Add (0) [id:7583;username:eevee;score:92;grade:A]
+Add (1) [id:9128;username:squirtle;score:34;grade:F]
+Add (2) [id:9384;username:rattata;score:76;grade:C]
+Sort (score)
+Add (22) [id:6457;score:76;grade:C]
+Add (12) [id:9128;username:squirtle;score:89;grade:B]
+Add (21) [id:2474;username:meowth;score:99;grade:A]
+Sort (grade)
+Sort (score)
+Remove (grade:A)
+Add (100) [id:9128;username:q;score:34;grade:F]
+Add (200) [id:4341;username:f;score:34;grade:F]
+Add (36) [id:5345;username:h;score:34;grade:F]
+Add (42) [id:6543;username:j;score:34;grade:F]
+Add (57) [id:3455;username:g;score:34;grade:F]
+Sort (id)

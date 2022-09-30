@@ -1,0 +1,8 @@
+[id:6546;username:a;score:43;grade:F]
+[id:3465;username:i;score:60;grade:D]
+[id:5346;username:m;score:64;grade:D]
+[id:1566;username:n;score:75;grade:C]
+[id:1353;username:s;score:82;grade:B]
+[id:6564;username:t;score:82;grade:B]
+[id:5663;username:v;score:98;grade:A]
+[id:1235;username:w;score:59;grade:F]
