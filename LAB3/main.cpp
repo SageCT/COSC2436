@@ -18,8 +18,11 @@ int main(int argc, char *argv[])
     ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
-        vector<string> lines;
         string in;
+        vector<string> lines;
+        stack<char> chars;
+        // EXAMPLE INPUT
+        // ( 2 + 4 ) * x = 24
 
         while (getline(input, in))
         {
@@ -29,6 +32,32 @@ int main(int argc, char *argv[])
             if (in.size() == 0)
                 continue;
             lines.push_back(in);
+        }
+
+        for (auto line : lines)
+        {
+            for (int i = line.length() - 1; i >= 0; i--)
+            {
+                chars.push(line.at(i));
+            }
+
+            while (!chars.empty())
+            {
+                if (chars.top() == '(')
+                {
+
+                    stack<char> temp(chars);
+                    string eqtn;
+                    temp.pop();
+
+                    while (temp.top() != ')')
+                    {
+                        eqtn += temp.top();
+                        temp.pop();
+                    }
+                }
+                chars.pop();
+            }
         }
     }
 }
