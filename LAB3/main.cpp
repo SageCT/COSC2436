@@ -31,3 +31,4 @@ int main(int argc, char *argv[])
             lines.push_back(in);
         }
     }
+}
