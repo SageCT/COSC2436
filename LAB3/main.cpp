@@ -8,6 +8,30 @@
 
 using namespace std;
 
+void multiply(string &eqtn)
+{
+    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('*'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('*') + 1, eqtn.length() - 1));
+    eqtn = to_string(leftInt * rightInt);
+}
+
+void divide(string &eqtn)
+{
+    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('/'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('/') + 1, eqtn.length() - 1));
+    eqtn = to_string(leftInt / rightInt);
+}
+
+void add(string &eqtn)
+{
+    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('+'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('+') + 1, eqtn.length() - 1));
+    eqtn = to_string(leftInt + rightInt);
+}
+
+void subtract(string &eqtn)
+{
+    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('-'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('-') + 1, eqtn.length() - 1));
+    eqtn = to_string(leftInt - rightInt);
+}
+
 int main(int argc, char *argv[])
 {
     // ArgumentManager am(argc, argv);
@@ -55,9 +79,30 @@ int main(int argc, char *argv[])
                         eqtn += temp.top();
                         temp.pop();
                     }
+                    std::cout << eqtn << std::endl;
+                    if (eqtn.find('*') != string::npos)
+                    {
+                        multiply(eqtn);
+                        std::cout << eqtn << std::endl;
+                    }
 
-                    int optype = 0;
-                    if (eqtn)
+                    else if (eqtn.find('/') != string::npos)
+                    {
+                        divide(eqtn);
+                        cout << eqtn << std::endl;
+                    }
+
+                    else if (eqtn.find('+') != string::npos)
+                    {
+                        add(eqtn);
+                        cout << eqtn << std::endl;
+                    }
+
+                    else if (eqtn.find('-') != string::npos)
+                    {
+                        subtract(eqtn);
+                        cout << eqtn << std::endl;
+                    }
                 }
                 chars.pop();
             }
