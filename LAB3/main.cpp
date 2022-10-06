@@ -55,6 +55,9 @@ int main(int argc, char *argv[])
                         eqtn += temp.top();
                         temp.pop();
                     }
+
+                    int optype = 0;
+                    if (eqtn)
                 }
                 chars.pop();
             }
