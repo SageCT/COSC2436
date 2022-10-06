@@ -32,6 +32,48 @@ void subtract(string &eqtn)
     eqtn = to_string(leftInt - rightInt);
 }
 
+string toPostFix(string str)
+{
+    stack<char> s;
+    string result = "";
+
+    for (int x = 0; x < str.length(); x++)
+    {
+        if (isdigit(str.at(x)))
+            result += str.at(x);
+        else if (str.at(x) == '(')
+            s.push('(');
+        else if (str.at(x) == ')')
+        {
+            while (s.top() != '(')
+            {
+                result += s.top();
+                s.pop();
+            }
+            s.pop();
+        }
+        else
+        {
+            while (!s.empty() && priority(str.at(x)) <= priority(s.top()))
+            {
+                result += s.top();
+                s.pop();
+            }
+            s.push(str.at(x));
+        }
+    }
+}
+
+int priority(char l)
+{
+    if (l == '*' || l == '/')
+        return 2;
+    else if (l == '+' || l == '-')
+        return 1;
+    else
+        return -1;
+}
+
 int main(int argc, char *argv[])
 {
     // ArgumentManager am(argc, argv);
