@@ -8,28 +8,14 @@
 
 using namespace std;
 
-void multiply(string &eqtn)
+int priority(char l)
 {
-    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('*'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('*') + 1, eqtn.length() - 1));
-    eqtn = to_string(leftInt * rightInt);
-}
-
-void divide(string &eqtn)
-{
-    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('/'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('/') + 1, eqtn.length() - 1));
-    eqtn = to_string(leftInt / rightInt);
-}
-
-void add(string &eqtn)
-{
-    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('+'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('+') + 1, eqtn.length() - 1));
-    eqtn = to_string(leftInt + rightInt);
-}
-
-void subtract(string &eqtn)
-{
-    float leftInt = (float)stoi(eqtn.substr(0, eqtn.find('-'))), rightInt = (float)stoi(eqtn.substr(eqtn.find('-') + 1, eqtn.length() - 1));
-    eqtn = to_string(leftInt - rightInt);
+    if (l == '*' || l == '/')
+        return 2;
+    else if (l == '+' || l == '-')
+        return 1;
+    else
+        return -1;
 }
 
 string toPostFix(string str)
@@ -37,9 +23,12 @@ string toPostFix(string str)
     stack<char> s;
     string result = "";
 
+    // EXAMPLE INPUT
+    // ( 2 + 4 ) * x = 24
+
     for (int x = 0; x < str.length(); x++)
     {
-        if (isdigit(str.at(x)))
+        if (isdigit(str.at(x)) || str.at(x) == 'x')
             result += str.at(x);
         else if (str.at(x) == '(')
             s.push('(');
@@ -62,16 +51,12 @@ string toPostFix(string str)
             s.push(str.at(x));
         }
     }
-}
-
-int priority(char l)
-{
-    if (l == '*' || l == '/')
-        return 2;
-    else if (l == '+' || l == '-')
-        return 1;
-    else
-        return -1;
+    while (!s.empty())
+    {
+        result += s.top();
+        s.pop();
+    }
+    return result;
 }
 
 int main(int argc, char *argv[])
@@ -100,54 +85,11 @@ int main(int argc, char *argv[])
             lines.push_back(in);
         }
 
-        for (auto line : lines)
+        for (int x = 0; x < lines.size(); x++)
         {
-            for (int i = line.length() - 1; i >= 0; i--)
-            {
-                chars.push(line.at(i));
-            }
-
-            while (!chars.empty())
-            {
-                if (chars.top() == '(')
-                {
-
-                    stack<char> temp(chars);
-                    string eqtn;
-                    temp.pop();
-
-                    while (temp.top() != ')')
-                    {
-                        eqtn += temp.top();
-                        temp.pop();
-                    }
-                    std::cout << eqtn << std::endl;
-                    if (eqtn.find('*') != string::npos)
-                    {
-                        multiply(eqtn);
-                        std::cout << eqtn << std::endl;
-                    }
-
-                    else if (eqtn.find('/') != string::npos)
-                    {
-                        divide(eqtn);
-                        cout << eqtn << std::endl;
-                    }
-
-                    else if (eqtn.find('+') != string::npos)
-                    {
-                        add(eqtn);
-                        cout << eqtn << std::endl;
-                    }
-
-                    else if (eqtn.find('-') != string::npos)
-                    {
-                        subtract(eqtn);
-                        cout << eqtn << std::endl;
-                    }
-                }
-                chars.pop();
-            }
+            string line = lines.at(x).substr(0, lines.at(x).find("="));
+            (x != lines.size() - 1) ? (cout << toPostFix(line) << endl) : (cout << toPostFix(line) << endl);
+            // cout << toPostFix(line) << endl;
         }
     }
 }
