@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     // ifstream input(am.get("input"));
     // ofstream out(am.get("output"));
 
-    ifstream input("input11.txt");
+    ifstream input("input1.txt");
     ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
@@ -158,12 +158,11 @@ int main(int argc, char *argv[])
 
             double ans = 0;
             string postFix = toPostFix(line);
-            cout << postFix << endl;
             postFix = computePostfix(postFix);
 
             if (postFix.find("*") != string::npos)
             {
-                //Isolating the number on the left side of the equation.
+                // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
                     if (isdigit(ans))
@@ -175,14 +174,14 @@ int main(int argc, char *argv[])
 
             else if (postFix.find("/") != string::npos)
             {
-                //Isolating the number on the left side of the equation.
+                // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
                     if (isdigit(ans))
                         temp += ans;
                 double num = stoi(temp);
 
-                //Depending on what character is first aka the number or x, multiply or divide the other side.
+                // Depending on what character is first aka the number or x, multiply or divide the other side.
                 if (isdigit(postFix.at(0)))
                     ans = (double)num / (double)rightSide;
                 else if (postFix.at(0) == 'x')
@@ -191,7 +190,7 @@ int main(int argc, char *argv[])
 
             else if (postFix.find("+") != string::npos)
             {
-                //Isolating the number on the left side of the equation.
+                // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
                     if (isdigit(ans))
@@ -203,12 +202,25 @@ int main(int argc, char *argv[])
 
             else if (postFix.find("-") != string::npos)
             {
+                // Isolating the number on the left side of the equation.
+                string temp = "";
+                for (auto ans : postFix)
+                    if (isdigit(ans))
+                        temp += ans;
+                double num = stoi(temp);
 
+                // Depending on whether the x or num is first add from right side or subtract and multiply by a negative.
+                if (isdigit(postFix.at(0)))
+                {
+                    ans = (double)rightSide - (double)num;
+                    (ans == 0) ? (ans = 0) : (ans *= -1);
+                }
+                else if (postFix.at(0) == 'x')
+                    ans = (double)rightSide + (double)num;
             }
 
-            cout << std::setprecision(2) << std::fixed;
-            cout << postFix << endl;
-            cout << ans << endl;
+            out << std::setprecision(2) << std::fixed;
+            out << ans;
         }
     }
 }
