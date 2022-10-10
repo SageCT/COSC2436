@@ -59,13 +59,78 @@ string toPostFix(string str)
     return result;
 }
 
+string computePostfix(string str)
+{
+    stack<int> s;
+    string ans;
+
+    // Computing postFix
+    for (int x = 0; x < str.length(); x++)
+    {
+        if (str.at(x) >= '0' && str.at(x) <= '9')
+        {
+            string temp = "";
+            temp += str.at(x);
+            s.push(stoi(temp));
+        }
+        else if (str.at(x) == 'x')
+        {
+            s.push(-1);
+        }
+        else
+        {
+
+            int rightNum = s.top();
+            s.pop();
+
+            int leftNum = s.top();
+            s.pop();
+
+            if (rightNum > -1 && leftNum > -1)
+            {
+                switch (str.at(x))
+                {
+                case '+':
+                    s.push(leftNum + rightNum);
+                    break;
+                case '-':
+                    s.push(leftNum - rightNum);
+                    break;
+                case '*':
+                    s.push(leftNum * rightNum);
+                    break;
+                case '/':
+                    s.push(leftNum / rightNum);
+                    break;
+                }
+            }
+            else if (leftNum < 0 || rightNum < 0)
+            {
+                if (leftNum < 0)
+                {
+                    ans += "x";
+                    (leftNum > -1) ? (ans += to_string(leftNum)) : (ans += to_string(rightNum));
+                    ans += str.at(x);
+                }
+                else if (rightNum < 0)
+                {
+                    (leftNum > -1) ? (ans += to_string(leftNum)) : (ans += to_string(rightNum));
+                    ans += "x";
+                    ans += str.at(x);
+                }
+            }
+        }
+    }
+    return ans;
+}
+
 int main(int argc, char *argv[])
 {
     // ArgumentManager am(argc, argv);
     // ifstream input(am.get("input"));
     // ofstream out(am.get("output"));
 
-    ifstream input("input1.txt");
+    ifstream input("input3.txt");
     ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
@@ -88,8 +153,29 @@ int main(int argc, char *argv[])
         for (int x = 0; x < lines.size(); x++)
         {
             string line = lines.at(x).substr(0, lines.at(x).find("="));
-            (x != lines.size() - 1) ? (cout << toPostFix(line) << endl) : (cout << toPostFix(line) << endl);
-            // cout << toPostFix(line) << endl;
+            string temp = lines.at(x).substr(lines.at(x).find("=") + 1, (lines.at(x).find("=")) - (lines.at(x).length() - 1));
+
+            string postFix = toPostFix(line);
+            string answer = computePostfix(postFix);
+
+            if (answer.find("*") != string::npos)
+            {
+            }
+
+            else if (answer.find("/") != string::npos)
+            {
+            }
+
+            else if (answer.find("+") != string::npos)
+            {
+            }
+
+            else if (answer.find("-") != string::npos)
+            {
+            }
+
+            cout << postFix << endl;
+            cout << answer << endl;
         }
     }
 }
