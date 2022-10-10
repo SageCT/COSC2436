@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     // ifstream input(am.get("input"));
     // ofstream out(am.get("output"));
 
-    ifstream input("input3.txt");
+    ifstream input("input11.txt");
     ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
 
             if (postFix.find("*") != string::npos)
             {
+                //Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
                     if (isdigit(ans))
@@ -174,12 +175,14 @@ int main(int argc, char *argv[])
 
             else if (postFix.find("/") != string::npos)
             {
+                //Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
                     if (isdigit(ans))
                         temp += ans;
                 double num = stoi(temp);
 
+                //Depending on what character is first aka the number or x, multiply or divide the other side.
                 if (isdigit(postFix.at(0)))
                     ans = (double)num / (double)rightSide;
                 else if (postFix.at(0) == 'x')
@@ -188,10 +191,19 @@ int main(int argc, char *argv[])
 
             else if (postFix.find("+") != string::npos)
             {
+                //Isolating the number on the left side of the equation.
+                string temp = "";
+                for (auto ans : postFix)
+                    if (isdigit(ans))
+                        temp += ans;
+                double num = stoi(temp);
+
+                ans = (double)rightSide - (double)num;
             }
 
             else if (postFix.find("-") != string::npos)
             {
+
             }
 
             cout << std::setprecision(2) << std::fixed;
