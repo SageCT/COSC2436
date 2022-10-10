@@ -4,6 +4,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <iomanip>
 #include "ArgumentManager.h"
 
 using namespace std;
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
     // ifstream input(am.get("input"));
     // ofstream out(am.get("output"));
 
-    ifstream input("input3.txt");
+    ifstream input("input1.txt");
     ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
@@ -153,29 +154,38 @@ int main(int argc, char *argv[])
         for (int x = 0; x < lines.size(); x++)
         {
             string line = lines.at(x).substr(0, lines.at(x).find("="));
-            string temp = lines.at(x).substr(lines.at(x).find("=") + 1, (lines.at(x).find("=")) - (lines.at(x).length() - 1));
+            double rightSide = stoi(lines.at(x).substr(lines.at(x).find("=") + 1, (lines.at(x).find("=")) - (lines.at(x).length() - 1)));
 
+            double ans = 0;
             string postFix = toPostFix(line);
-            string answer = computePostfix(postFix);
+            postFix = computePostfix(postFix);
 
-            if (answer.find("*") != string::npos)
+            if (postFix.find("*") != string::npos)
+            {
+                string temp = "";
+                for (auto ans : postFix)
+                    if (isdigit(ans))
+                        temp += ans;
+                double num = stoi(temp);
+
+                ans = (double)rightSide / (double)num;
+            }
+
+            else if (postFix.find("/") != string::npos)
             {
             }
 
-            else if (answer.find("/") != string::npos)
+            else if (postFix.find("+") != string::npos)
             {
             }
 
-            else if (answer.find("+") != string::npos)
+            else if (postFix.find("-") != string::npos)
             {
             }
 
-            else if (answer.find("-") != string::npos)
-            {
-            }
-
+            cout << std::setprecision(2) << std::fixed;
             cout << postFix << endl;
-            cout << answer << endl;
+            cout << ans << endl;
         }
     }
 }
