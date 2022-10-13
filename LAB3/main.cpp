@@ -62,7 +62,7 @@ string toPostFix(string str)
 
 string computePostfix(string str)
 {
-    stack<int> s;
+    stack<double> s;
     string ans;
 
     // Computing postFix
@@ -81,10 +81,10 @@ string computePostfix(string str)
         else
         {
 
-            int rightNum = s.top();
+            double rightNum = s.top();
             s.pop();
 
-            int leftNum = s.top();
+            double leftNum = s.top();
             s.pop();
 
             if (rightNum > -1 && leftNum > -1)
