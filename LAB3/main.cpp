@@ -72,11 +72,11 @@ string computePostfix(string str)
         {
             string temp = "";
             temp += str.at(x);
-            s.push(stoi(temp));
+            s.push(stod(temp));
         }
         else if (str.at(x) == 'x')
         {
-            s.push(-1);
+            s.push(-1000);
         }
         else
         {
@@ -87,7 +87,7 @@ string computePostfix(string str)
             double leftNum = s.top();
             s.pop();
 
-            if (rightNum > -1 && leftNum > -1)
+            if (rightNum > -1000 && leftNum > -1000)
             {
                 switch (str.at(x))
                 {
@@ -110,12 +110,12 @@ string computePostfix(string str)
                 if (leftNum < 0)
                 {
                     ans += "x";
-                    (leftNum > -1) ? (ans += to_string(leftNum)) : (ans += to_string(rightNum));
+                    (leftNum > -1000) ? (ans += to_string(leftNum)) : (ans += to_string(rightNum));
                     ans += str.at(x);
                 }
                 else if (rightNum < 0)
                 {
-                    (leftNum > -1) ? (ans += to_string(leftNum)) : (ans += to_string(rightNum));
+                    (leftNum > -1000) ? (ans += to_string(leftNum)) : (ans += to_string(rightNum));
                     ans += "x";
                     ans += str.at(x);
                 }
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     // ifstream input(am.get("input"));
     // ofstream out(am.get("output"));
 
-    ifstream input("input1.txt");
+    ifstream input("input9.txt");
     ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
@@ -154,20 +154,23 @@ int main(int argc, char *argv[])
         for (int x = 0; x < lines.size(); x++)
         {
             string line = lines.at(x).substr(0, lines.at(x).find("="));
-            double rightSide = stoi(lines.at(x).substr(lines.at(x).find("=") + 1, (lines.at(x).find("=")) - (lines.at(x).length() - 1)));
+            double rightSide = stod(lines.at(x).substr(lines.at(x).find("=") + 1, (lines.at(x).find("=")) - (lines.at(x).length() - 1)));
 
             double ans = 0;
             string postFix = toPostFix(line);
+            cout << postFix << endl;
+
             postFix = computePostfix(postFix);
+            cout << postFix << "=" << rightSide << endl;
 
             if (postFix.find("*") != string::npos)
             {
                 // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
-                    if (isdigit(ans))
+                    if (isdigit(ans) || ans == '.' || postFix.at(0) == '-')
                         temp += ans;
-                double num = stoi(temp);
+                double num = stod(temp);
 
                 ans = (double)rightSide / (double)num;
             }
@@ -177,12 +180,12 @@ int main(int argc, char *argv[])
                 // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
-                    if (isdigit(ans))
+                    if (isdigit(ans) || ans == '.' || postFix.at(0) == '-')
                         temp += ans;
-                double num = stoi(temp);
+                double num = stod(temp);
 
                 // Depending on what character is first aka the number or x, multiply or divide the other side.
-                if (isdigit(postFix.at(0)))
+                if (isdigit(postFix.at(0)) || postFix.at(0) == '-')
                     ans = (double)num / (double)rightSide;
                 else if (postFix.at(0) == 'x')
                     ans = (double)rightSide * (double)num;
@@ -193,11 +196,18 @@ int main(int argc, char *argv[])
                 // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
-                    if (isdigit(ans))
+                    if (isdigit(ans) || ans == '.' || ans == '-')
                         temp += ans;
-                double num = stoi(temp);
+                double num = stod(temp);
 
-                ans = (double)rightSide - (double)num;
+                // Checking if the first character is a digit
+                if (isdigit(postFix.at(0)) || postFix.at(0) == '-')
+                {
+                    ans = (double)num - (double)rightSide;
+                    (ans == 0) ? (ans = 0) : (ans *= -1);
+                }
+                else if (postFix.at(0) == 'x')
+                    ans = (double)rightSide + (double)num;
             }
 
             else if (postFix.find("-") != string::npos)
@@ -205,9 +215,9 @@ int main(int argc, char *argv[])
                 // Isolating the number on the left side of the equation.
                 string temp = "";
                 for (auto ans : postFix)
-                    if (isdigit(ans))
+                    if (isdigit(ans) || ans == '.' || postFix.at(0) == '-')
                         temp += ans;
-                double num = stoi(temp);
+                double num = stod(temp);
 
                 // Depending on whether the x or num is first add from right side or subtract and multiply by a negative.
                 if (isdigit(postFix.at(0)))
