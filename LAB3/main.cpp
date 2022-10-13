@@ -127,12 +127,12 @@ string computePostfix(string str)
 
 int main(int argc, char *argv[])
 {
-    // ArgumentManager am(argc, argv);
-    // ifstream input(am.get("input"));
-    // ofstream out(am.get("output"));
+    ArgumentManager am(argc, argv);
+    ifstream input(am.get("input"));
+    ofstream out(am.get("output"));
 
-    ifstream input("input9.txt");
-    ofstream out("output1.txt");
+    // ifstream input("input9.txt");
+    // ofstream out("output1.txt");
     if (input.peek() != EOF)
     {
         string in;
