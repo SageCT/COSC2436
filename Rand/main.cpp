@@ -17,7 +17,124 @@ bool isSolved(vector<vector<char>> matrix, size_t row, size_t col)
     return true;
 }
 
-void moveUp(vector<vector<char>> matrix, size_t row, size_t col)
+void moveUp(vector<vector<char>> &matrix, size_t row, size_t col)
+{
+    Stack s;
+    int counter = 0;
+    char temp;
+
+    for (int j = 0; j < col; j++)
+    {
+        for (int i = 0; i < row; i++)
+        {
+            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
+            {
+                if (!s.isEmpty() && s.peek() == 'B')
+                {
+                    temp = s.pop();
+                    s.push('X');
+                }
+                else
+                    s.push(matrix[i][j]);
+            }
+            else if (matrix[i][j] == 'X')
+            {
+                while (s.getSize() < counter)
+                    s.push('O');
+                s.push('X');
+            }
+            counter++;
+        }
+
+        while (s.getSize() < counter)
+            s.push('O');
+
+        for (int i = row - 1; i >= 0; i--)
+            matrix[i][j] = s.pop();
+
+        counter = 0;
+    }
+}
+
+void moveRight(vector<vector<char>> &matrix, size_t row, size_t col) // Need to implement
+{
+    Stack s;
+    int counter = 0;
+    char temp;
+
+    for (int j = 0; j < col; j++)
+    {
+        for (int i = 0; i < row; i++)
+        {
+            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
+            {
+                if (!s.isEmpty() && s.peek() == 'B')
+                {
+                    temp = s.pop();
+                    s.push('X');
+                }
+                else
+                    s.push(matrix[i][j]);
+            }
+            else if (matrix[i][j] == 'X')
+            {
+                while (s.getSize() < counter)
+                    s.push('O');
+                s.push('X');
+            }
+            counter++;
+        }
+
+        while (s.getSize() < counter)
+            s.push('O');
+
+        for (int i = row - 1; i >= 0; i--)
+            matrix[i][j] = s.pop();
+
+        counter = 0;
+    }
+}
+
+void moveDown(vector<vector<char>> &matrix, size_t row, size_t col) // Need to implement
+{
+    Stack s;
+    int counter = 0;
+    char temp;
+
+    for (int j = 0; j < col; j++)
+    {
+        for (int i = 0; i < row; i++)
+        {
+            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
+            {
+                if (!s.isEmpty() && s.peek() == 'B')
+                {
+                    temp = s.pop();
+                    s.push('X');
+                }
+                else
+                    s.push(matrix[i][j]);
+            }
+            else if (matrix[i][j] == 'X')
+            {
+                while (s.getSize() < counter)
+                    s.push('O');
+                s.push('X');
+            }
+            counter++;
+        }
+
+        while (s.getSize() < counter)
+            s.push('O');
+
+        for (int i = row - 1; i >= 0; i--)
+            matrix[i][j] = s.pop();
+
+        counter = 0;
+    }
+}
+
+void moveLeft(vector<vector<char>> &matrix, size_t row, size_t col) // Need to implement
 {
     Stack s;
     int counter = 0;
@@ -126,7 +243,7 @@ int main(int argc, char *argv[])
         {
             char c;
             input >> c;
-            temp.push_back(temp);
+            temp.push_back(c);
         }
         matrix.push_back(temp);
     }
