@@ -37,7 +37,7 @@ void moveUp(vector<vector<char>> &matrix, size_t row, size_t col)
                 else
                     s.push(matrix[i][j]);
             }
-            else if (matrix[i][j] == 'X')
+            else if (matrix[i][j] != 'X')
             {
                 while (s.getSize() < counter)
                     s.push('O');
@@ -76,7 +76,7 @@ void moveRight(vector<vector<char>> &matrix, size_t row, size_t col) // Need to 
                 else
                     s.push(matrix[i][j]);
             }
-            else if (matrix[i][j] == 'X')
+            else if (matrix[i][j] != 'X')
             {
                 while (s.getSize() < counter)
                     s.push('O');
@@ -115,7 +115,7 @@ void moveDown(vector<vector<char>> &matrix, size_t row, size_t col) // Need to i
                 else
                     s.push(matrix[i][j]);
             }
-            else if (matrix[i][j] == 'X')
+            else if (matrix[i][j] != 'X')
             {
                 while (s.getSize() < counter)
                     s.push('O');
@@ -154,7 +154,7 @@ void moveLeft(vector<vector<char>> &matrix, size_t row, size_t col) // Need to i
                 else
                     s.push(matrix[i][j]);
             }
-            else if (matrix[i][j] == 'X')
+            else if (matrix[i][j] != 'X')
             {
                 while (s.getSize() < counter)
                     s.push('O');
