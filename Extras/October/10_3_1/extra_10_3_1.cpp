@@ -51,14 +51,5 @@ int main()
     rr.print();
 
     rr.roundR(remainingTime);
-
-    // keep dequeuing updating
-
-    int round = rand() % 10; // Round = rand()%5; or ask user
-
-    // TESTING
-
-    rr.enq("2", 20, 20);
-    rr.enq("3", 3, 3);
     return 0;
 }
