@@ -19,6 +19,7 @@ private:
 
 public:
     robin();
+    bool isEmpty() const { return (front == nullptr); }
     void enq(string, int, int);
     node *deq();
     void print();
@@ -34,22 +35,17 @@ robin::robin()
 void robin::enq(string st, int a, int b)
 {
     node *temp = new node();
-    temp->job = st, temp->totalMin = a, temp->remainMin = b;
+    temp->job = st, temp->totalMin = a, temp->remainMin = b, temp->next = nullptr;
 
-    if (front == nullptr)
-        front = back = temp;
-
-    else if (front->next == nullptr)
+    if (isEmpty())
     {
-        front->next = back;
-        temp->next = front;
         front = temp;
+        back = temp;
     }
-
     else
     {
-        temp->next = front;
-        temp = front;
+        back->next = temp;
+        back = temp;
     }
 }
 
