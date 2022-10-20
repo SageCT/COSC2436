@@ -7,10 +7,53 @@
 #include <vector>
 using namespace std;
 
-int shiftU(int n)
+bool isSolved(vector<vector<char>> matrix, size_t row, size_t col)
 {
+  for (size_t i = 0; i < row; i++)
+    for (size_t j = 0; j < col; j++)
+      if (matrix[i][j] == 'B')
+        return false;
 
-  return 0;
+  return true;
+}
+
+int shiftU(vector<vector<char>> &matrix, size_t row, size_t col)
+{
+  Stack s;
+  int counter = 0;
+  char temp;
+
+  for (int j = 0; j < col; j++)
+  {
+    for (int i = 0; i < row; i++)
+    {
+      if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
+      {
+        if (!s.isEmpty() && s.peek() == 'B')
+        {
+          temp = s.pop();
+          s.push('X');
+        }
+        else
+          s.push(matrix[i][j]);
+      }
+      else if (matrix[i][j] != 'X')
+      {
+        while (s.getSize() < counter)
+          s.push('O');
+        s.push('X');
+      }
+      counter++;
+    }
+
+    while (s.getSize() < counter)
+      s.push('O');
+
+    for (int i = row - 1; i >= 0; i--)
+      matrix[i][j] = s.pop();
+
+    counter = 0;
+  }
 }
 
 int shiftD(int n)

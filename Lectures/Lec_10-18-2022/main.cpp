@@ -11,18 +11,17 @@
 // RoundRobin
 int main()
 {
-    //Create a queue and fill jobs randomly
-
+    // Create a queue and fill jobs randomly
     robin rr;
 
     // for ... or while loop to enqueue
     // Generate a random value
-    rr.enqueue(1,30,30);
+    rr.enqueue(1, 30, 30);
 
     int counter = 0; // Count # of minutes
     // ct1 = when j1 started ct1_e when j1 ended
 
-    //keep dequeuing updating
+    // keep dequeuing updating
 
     int round = 3; // Round = rand()%5; or ask user
     return 0;
