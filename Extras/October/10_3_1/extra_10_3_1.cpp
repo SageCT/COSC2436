@@ -34,21 +34,25 @@ int main()
     // Create a queue and fill jobs randomly
     int counter = 0;
     int totalTime = 100;
+    int remainingTime = totalTime;
     robin rr;
 
     // for ... or while loop to enqueue
     // Generate a random value
     while (counter++ < 5)
-        rr.enq("J" + to_string(counter), rand() % 10, totalTime);
+        rr.enq("J" + to_string(counter), (rand() % 10) + 1, totalTime);
 
     // counter = 0; // Count # of minutes
     // ct1 = when j1 started ct1_e when j1 ended
 
-    
+    // Remaining time minus total time
+
+    while (remainingTime > 0)
+    {
+        }
 
     rr.print();
-    // rr.print();
-
+    rr.print();
 
     // keep dequeuing updating
 
