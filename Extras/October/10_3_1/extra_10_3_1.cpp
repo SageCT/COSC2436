@@ -47,12 +47,10 @@ int main()
 
     // Remaining time minus total time
 
-    while (remainingTime > 0)
-    {
-        }
+    rr.print();
+    rr.print();
 
-    rr.print();
-    rr.print();
+    rr.roundR(remainingTime);
 
     // keep dequeuing updating
 

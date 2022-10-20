@@ -99,19 +99,28 @@ node *robin::deq()
     return nullptr;
 }
 
+// Performs round robin function, moves front to next front, then enqueues the front to the back of the queue. Keeps looping until time is 0.
 void robin::roundR(int &remTime)
 {
-    remTime -= front->totalMin;
-    front->remainMin = remTime;
 
-    if (remTime > 0)
+    string origJob = front->job;
+    while (remTime - front->totalMin > 0)
     {
         front->remainMin = remTime;
+        remTime -= front->totalMin;
+        front->remainMin = remTime;
+
         cout << front->job << " Completed " << remTime << " remaining time." << endl;
+
+        node *temp = front;
+        front = front->next;
+        enq(temp);
+
+        if (origJob == front->job)
+            cout << "Looping with excess time\n" << endl;
     }
 
-    else if (remTime <= 0)
-        cout << "No time remaining." << endl;
+    cout << "No time remaining." << endl;
 }
 
 void robin::deqDel()
