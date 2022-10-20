@@ -1,21 +1,20 @@
 #include <iostream>
-#include <fstream>
 #include <random>
 
-void mergeSort()
-{
+using namespace std;
+
+void print(int arr[], int size) {
+  for (int i = 0; i < size; i++) cout << arr[i] << " ";
+
+  cout << endl;
 }
 
-void quickSort()
-{
-}
+void merge() {}
 
-void shellSort()
-{
-}
+void mergeSort(int arr[], int a, int b) { if () }
 
-int main()
-{
+void quickSort() {}
 
-    return 0;
-}
+void shellSort() {}
+
+int main() { return 0; }
