@@ -77,9 +77,8 @@ int partition(int arr[], int left, int right) {
     }
   }
 
-  int temp = arr[partIndex];
-  arr[partIndex] = arr[right];
-  arr[right] = temp;
+  swap(arr[partIndex], arr[right]);
+  return partIndex;
 }
 
 void quickSort(int arr[], int left, int right) {
@@ -90,21 +89,32 @@ void quickSort(int arr[], int left, int right) {
   }
 }
 
-void shellSort(int arr[]) {}
-
 void bucketSort(int arr[]) {}
 
 void radixSort(int arr[]) {}
 
+void shellSort(int arr[]) {}
+
 int main() {
   int arr[10];
+
+  cout << "Before sort: \n";
   for (int x = 0; x < 10; x++) {
     arr[x] = rand() % 100;
     cout << arr[x] << " ";
   }
-  cout << endl;
+  cout << "\n\n";
 
   mergeSort(arr, 0, 9);
+  // quickSort(arr, 0, 9);
+  // bucketSort(arr, 0, 9);
+  //radixSort(arr, 0 ,9);
+
+  cout << "After mergeSort: " << endl;
+  // cout << "After quickSort: " << endl;
+  // cout << "After bucketSort: " << endl;
+  // cout << "After radixSort: " << endl;
+
 
   for (int x = 0; x < 10; x++) {
     cout << arr[x] << " ";
