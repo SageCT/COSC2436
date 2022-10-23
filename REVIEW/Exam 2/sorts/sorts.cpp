@@ -7,6 +7,12 @@ void print(int arr[], int size) {
   cout << endl;
 }
 
+void swap(int &a, int &b) {
+  int temp = a;
+  a = b;
+  b = temp;
+}
+
 void merge(int arr[], int low, int mid, int high) {
   int l = low;       // Starting index for left subarray
   int r = mid + 1;   // Starting index for temporary array
@@ -66,9 +72,7 @@ int partition(int arr[], int left, int right) {
 
   for (int i = left; i < right; i++) {
     if (pivot >= arr[i]) {
-      int temp = arr[l];
-      arr[l] = arr[i];
-      arr[i] = temp;
+      swap(arr[partIndex], arr[i]);
       partIndex++;
     }
   }
@@ -86,7 +90,11 @@ void quickSort(int arr[], int left, int right) {
   }
 }
 
-void shellSort() {}
+void shellSort(int arr[]) {}
+
+void bucketSort(int arr[]) {}
+
+void radixSort(int arr[]) {}
 
 int main() {
   int arr[10];
