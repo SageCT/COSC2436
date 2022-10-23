@@ -39,16 +39,18 @@ void merge(int arr[], int low, int mid, int high) {
     mergePos++, r++;
   }
 
-  for (int x = low; x < arrSize; x++) 
-    arr[x] = temp[x];
-    
-  
+  for (int x = low; x < arrSize; x++) arr[x] = temp[x];
+
   delete[] temp;
 }
 
+// Mergesort INFO
+// Time Complexity: O[nlog(n)]
+// Drawbacks: High memory usage, Copying time
+
 void mergeSort(int *arr, int low, int high) {
   if (low < high) {
-    int mid = low + (high - low) / 2;
+    int mid = (low + high) / 2;
     mergeSort(arr, low, mid);
     mergeSort(arr, mid + 1, high);
 
@@ -56,7 +58,15 @@ void mergeSort(int *arr, int low, int high) {
   }
 }
 
-void quickSort() {}
+int partition(int arr[], int left, int right) {}
+
+void quickSort(int arr[], int left, int right) {
+  if (left < right) {
+    int pivot = partition(arr, left, right);
+    quickSort(arr, left, pivot - 1);
+    quickSort(arr, pivot + 1, right);
+  }
+}
 
 void shellSort() {}
 
