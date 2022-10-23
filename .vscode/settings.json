@@ -13,6 +13,7 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "iosfwd": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "queue": "cpp"
     }
 }

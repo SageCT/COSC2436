@@ -58,7 +58,25 @@ void mergeSort(int *arr, int low, int high) {
   }
 }
 
-int partition(int arr[], int left, int right) {}
+int partition(int arr[], int left, int right) {
+  int partIndex = left;
+  int pivot = arr[right];
+  int l = left;
+  int r = right;
+
+  for (int i = left; i < right; i++) {
+    if (pivot >= arr[i]) {
+      int temp = arr[l];
+      arr[l] = arr[i];
+      arr[i] = temp;
+      partIndex++;
+    }
+  }
+
+  int temp = arr[partIndex];
+  arr[partIndex] = arr[right];
+  arr[right] = temp;
+}
 
 void quickSort(int arr[], int left, int right) {
   if (left < right) {
