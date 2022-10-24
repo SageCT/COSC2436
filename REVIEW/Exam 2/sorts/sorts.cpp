@@ -25,7 +25,7 @@ void merge(int arr[], int low, int mid, int high) {
 
   while (l <= mid && r <= high) {
     // arr[i] is smaller than arr[j]
-    if (arr[l] < arr[r]) {
+    if (arr[l] <= arr[r]) {
       temp[mergePos] = arr[l];
       l++;
     } else {
@@ -91,35 +91,34 @@ void quickSort(int arr[], int left, int right) {
   }
 }
 
-void bucketSort(int arr[], int maxDigits) {
+void bucketSort(int *arr, int n) {
   // create n empty buckets
-  vector<vector<int>> buckets;
-  int n = 10;
-  int modMax = 1;
-
-  for (int x = 0; x < maxDigits; x++) modMax *= 10;
-
-  // Put array elements in different buckets
+  vector<int> *buckets = new vector<int>[n];
   for (int x = 0; x < n; x++) {
-    for (int y = 0; y < maxDigits; y++) {
-      buckets.at(x).push_back();
+    if (arr[x] > n) {
+      buckets[n - 1].push_back(arr[x]);
+    } else {
+      buckets[arr[x]].push_back(arr[x]);
     }
   }
+  // Sorting individual buckets
+  for (int x = 0; x < n; x++) sort(buckets[x].begin(), buckets[x].end());
 
-  // Sort individual buckets
-  for (int i = 0; i < n; i++) {
-    sort(buckets.begin(), buckets.end());
-  }
-
+  // Adding sorted buckets back to the array
   int index = 0;
-  for (int x = 0; x < n; x++) {
-    for (int y = 0; y < bucketSize; y++) {
-      arr[index++] = buckets[x][y];
-    }
-  }
+  for (int x = 0; x < n; x++)
+    for (int y = 0; y < buckets[x].size(); y++) arr[index++] = buckets[x][y];
 }
 
-void radixSort(int arr[]) {}
+int findMax(int *arr, int length) {
+  int max = arr[0];
+  for (int i = 1; i < length; i++)
+    if (max < arr[i]) max = arr[i];
+
+  return max;
+}
+
+void radixSort(int *arr, int n) {}
 
 void heapSort(int arr[]) {}
 
