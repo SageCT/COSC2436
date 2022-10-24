@@ -1,5 +1,7 @@
 #include <iostream>
 #include <random>
+#include <vector>
+
 using namespace std;
 
 void print(int arr[], int size) {
@@ -89,9 +91,37 @@ void quickSort(int arr[], int left, int right) {
   }
 }
 
-void bucketSort(int arr[]) {}
+void bucketSort(int arr[], int maxDigits) {
+  // create n empty buckets
+  vector<vector<int>> buckets;
+  int n = 10;
+  int modMax = 1;
+
+  for (int x = 0; x < maxDigits; x++) modMax *= 10;
+
+  // Put array elements in different buckets
+  for (int x = 0; x < n; x++) {
+    for (int y = 0; y < maxDigits; y++) {
+      buckets.at(x).push_back();
+    }
+  }
+
+  // Sort individual buckets
+  for (int i = 0; i < n; i++) {
+    sort(buckets.begin(), buckets.end());
+  }
+
+  int index = 0;
+  for (int x = 0; x < n; x++) {
+    for (int y = 0; y < bucketSize; y++) {
+      arr[index++] = buckets[x][y];
+    }
+  }
+}
 
 void radixSort(int arr[]) {}
+
+void heapSort(int arr[]) {}
 
 void shellSort(int arr[]) {}
 
@@ -105,16 +135,17 @@ int main() {
   }
   cout << "\n\n";
 
-  mergeSort(arr, 0, 9);
+  // mergeSort(arr, 0, 9);
   // quickSort(arr, 0, 9);
-  // bucketSort(arr, 0, 9);
-  //radixSort(arr, 0 ,9);
+  bucketSort(arr, 9);
+  // heapSort(arr, 0, 9);
+  // radixSort(arr, 0 ,9);
 
-  cout << "After mergeSort: " << endl;
+  // cout << "After mergeSort: " << endl;
   // cout << "After quickSort: " << endl;
-  // cout << "After bucketSort: " << endl;
+  cout << "After bucketSort: " << endl;
+  // cout << "After heapSort: " << endl;
   // cout << "After radixSort: " << endl;
-
 
   for (int x = 0; x < 10; x++) {
     cout << arr[x] << " ";
