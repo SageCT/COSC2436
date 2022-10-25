@@ -1,6 +1,9 @@
+#include <algorithm>
 #include <iostream>
+#include <queue>
 #include <random>
-#include <vector>
+#include <string>
+
 
 using namespace std;
 
@@ -9,13 +12,7 @@ void print(int arr[], int size) {
   cout << endl;
 }
 
-void swap(int &a, int &b) {
-  int temp = a;
-  a = b;
-  b = temp;
-}
-
-void merge(int arr[], int low, int mid, int high) {
+void merge(int *arr, int low, int mid, int high) {
   int l = low;       // Starting index for left subarray
   int r = mid + 1;   // Starting index for temporary array
   int mergePos = 0;  // Starting index for right subarray
@@ -66,24 +63,25 @@ void mergeSort(int *arr, int low, int high) {
   }
 }
 
-int partition(int arr[], int left, int right) {
+int partition(int *arr, int left, int right) {
   int partIndex = left;
   int pivot = arr[right];
   int l = left;
   int r = right;
-
+  // Compares pivot to the array at index, if the pivot is bigger than index,
+  // swap right index with curr index
   for (int i = left; i < right; i++) {
     if (pivot >= arr[i]) {
-      swap(arr[partIndex], arr[i]);
+      swap(arr[partIndex], arr[i]);  // Important fuct
       partIndex++;
     }
   }
-
+  // Swap pivot with the element at partIndex
   swap(arr[partIndex], arr[right]);
   return partIndex;
 }
 
-void quickSort(int arr[], int left, int right) {
+void quickSort(int *arr, int left, int right) {
   if (left < right) {
     int pivot = partition(arr, left, right);
     quickSort(arr, left, pivot - 1);
@@ -120,9 +118,9 @@ int findMax(int *arr, int length) {
 
 void radixSort(int *arr, int n) {}
 
-void heapSort(int arr[]) {}
+void heapSort(int *arr) {}
 
-void shellSort(int arr[]) {}
+void shellSort(int *arr) {}
 
 int main() {
   int arr[10];
@@ -135,8 +133,8 @@ int main() {
   cout << "\n\n";
 
   // mergeSort(arr, 0, 9);
-  // quickSort(arr, 0, 9);
-  bucketSort(arr, 9);
+  quickSort(arr, 0, 9);
+  // bucketSort(arr, 9);
   // heapSort(arr, 0, 9);
   // radixSort(arr, 0 ,9);
 

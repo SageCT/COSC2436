@@ -243,7 +243,11 @@ int main() {
   int length = 9;
   cout << "Unsorted : ";
   print(arr, length);
-  shellSort(arr, 9);
-  cout << "Shell sort: " << endl;
+  // shellSort(arr, 9);
+  // bucketSort(arr,9);
+  quickSort(arr, 0, 9);
+  // cout << "Shell sort: " << endl;
+  // cout << "Bucket sort: " << endl;
+  cout << "Quick sort: " << endl;
   print(arr, length);
 }
