@@ -78,7 +78,6 @@ node *robin::deq() {
 
     return temp;
   }
-
   return nullptr;
 }
 

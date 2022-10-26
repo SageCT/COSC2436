@@ -4,12 +4,27 @@
 #include <random>
 #include <string>
 
-
 using namespace std;
 
 void print(int arr[], int size) {
   for (int i = 0; i < size; i++) cout << arr[i] << " ";
   cout << endl;
+}
+
+bool isSorted(int *arr, int size) {
+  for (int i = 0; i < size - 1; i++)
+    if (arr[i] > arr[i + 1]) return false;
+  return true;
+}
+
+void insertionSort(int *arr, int size) {
+  for (int i = 1; i < size; i++) {
+    int j = i;
+    while (j > 0 && arr[j - 1] > arr[j]) {
+      swap(arr[j], arr[j - 1]);
+      j--;
+    }
+  }
 }
 
 void merge(int *arr, int low, int mid, int high) {
@@ -29,7 +44,6 @@ void merge(int *arr, int low, int mid, int high) {
       temp[mergePos] = arr[r];  // arr[j] is smaller than arr[i]
       r++;
     }
-
     mergePos++;
   }
 
@@ -118,7 +132,39 @@ int findMax(int *arr, int length) {
 
 void radixSort(int *arr, int n) {}
 
-void heapSort(int *arr) {}
+void heapify(int *arr, int i, int size) {
+  int leftC = 2 * i + 1;
+  int rightC = 2 * i + 2;
+  int largest = i;
+
+  // If left child INDEX is larger than root value,
+  // new largest index is leftC
+  if (leftC < size && arr[leftC] > arr[i]) largest = leftC;
+
+  // If right child INDEX is larger than root value, or iteration
+  if (rightC < size && arr[rightC] > arr[largest]) largest = rightC;
+
+  // If largest is not the root
+  if (largest != i) {
+    swap(arr[i], arr[largest]);
+    heapify(arr, largest, size);
+  }
+}
+
+void buildHeap(int *arr, int size) {
+  for (int i = size / 2 - 1; i > -1; i--) {
+    heapify(arr, i, size - 1);
+  }
+}
+
+bool isHeap(int *arr, int size) {
+  for (int i = 0; i < size / 2 - 1; i++) {
+    if (arr[i] < arr[2 * i + 1] || arr[i] < arr[2 * i + 2]) return false;
+  }
+  return true;
+}
+
+void heapSort(int *arr, int size) { buildHeap(arr, size); }
 
 void shellSort(int *arr) {}
 
@@ -132,22 +178,33 @@ int main() {
   }
   cout << "\n\n";
 
+  // heapSort(arr, 10);
+  buildHeap(arr, 10);
+  // insertionSort(arr, 10);
   // mergeSort(arr, 0, 9);
-  quickSort(arr, 0, 9);
+  // quickSort(arr, 0, 9);
   // bucketSort(arr, 9);
   // heapSort(arr, 0, 9);
   // radixSort(arr, 0 ,9);
 
+  cout << "After building heap: " << endl;
+  // cout << "After insertionSort: " << endl;
   // cout << "After mergeSort: " << endl;
   // cout << "After quickSort: " << endl;
-  cout << "After bucketSort: " << endl;
+  // cout << "After bucketSort: " << endl;
   // cout << "After heapSort: " << endl;
   // cout << "After radixSort: " << endl;
 
   for (int x = 0; x < 10; x++) {
     cout << arr[x] << " ";
   }
-  cout << endl;
+
+  cout << "\n"
+       << "Sorted?: ";
+  (isSorted(arr, 10)) ? cout << "Yes" << endl : cout << "No" << endl;
+
+  cout << "Heapified?: ";
+  (isHeap(arr, 10)) ? cout << "Yes" << endl : cout << "No" << endl;
 
   return 0;
 }
