@@ -8,6 +8,14 @@
 #include "Stack.h"
 using namespace std;
 
+void print(vector<vector<char>> matrix) {
+  for (int i = 0; i < matrix.size(); i++) {
+    for (int j = 0; j < matrix[i].size(); j++) cout << matrix[i][j] << " ";
+    cout << endl;
+  }
+  cout << endl;
+}
+
 bool isSolved(vector<vector<char>> matrix, size_t row, size_t col) {
   for (size_t i = 0; i < row; i++)
     for (size_t j = 0; j < col; j++)
@@ -23,9 +31,9 @@ void moveU(vector<vector<char>> &matrix, size_t row, size_t col) {
 
   for (int j = 0; j < col; j++) {
     for (int i = 0; i < row; i++) {
-      if (matrix[i][j] != 'O' && matrix[i][j] != 'X') {
+      if (matrix[i][j] == 'B') {
         if (!s.isEmpty() && s.peek() == 'B') {
-          temp = s.pop();
+          s.pop();
           s.push('X');
         } else
           s.push(matrix[i][j]);
@@ -44,18 +52,46 @@ void moveU(vector<vector<char>> &matrix, size_t row, size_t col) {
   }
 }
 
-int moveD(vector<vector<char>> &matrix, size_t row,
-          size_t col)  // Need to implement
-{
+void moveD(vector<vector<char>> &matrix, size_t row, size_t col) {
+  Stack s, r;
+  int counter = 0, counterB = 0, counterX = 0;
+  char temp;
+
+  for (size_t j = 0; j < col; j++) {
+    for (size_t i = 0; i < row; i++) {
+      if (matrix[i][j] == 'B') {
+        if (!s.isEmpty() && s.peek() == 'B') {
+          s.pop();
+          s.push('X');
+        } else
+          s.push(matrix[i][j]);
+      } else if (matrix[i][j] == 'X') {
+        s.push('X');
+        while (s.getSize() < counter) s.push('O');
+      }
+      counter++;
+    }
+
+    while (s.getSize() < counter) s.push('O');
+    while (!s.isEmpty()) r.push(s.pop());
+
+    for (int i = row - 1; i >= 0; i--) matrix[i][j] = r.pop();
+
+    counter = 0;
+  }
+}
+
+// Need to implement
+void moveL(vector<vector<char>> &matrix, size_t row, size_t col) {
   Stack s;
   int counter = 0;
   char temp;
 
   for (int j = 0; j < col; j++) {
     for (int i = 0; i < row; i++) {
-      if (matrix[i][j] != 'O' && matrix[i][j] != 'X') {
+      if (matrix[i][j] == 'B') {
         if (!s.isEmpty() && s.peek() == 'B') {
-          temp = s.pop();
+          s.pop();
           s.push('X');
         } else
           s.push(matrix[i][j]);
@@ -74,9 +110,8 @@ int moveD(vector<vector<char>> &matrix, size_t row,
   }
 }
 
-void moveL(vector<vector<char>> &matrix, size_t row,
-           size_t col)  // Need to implement
-{
+// Need to implement
+void moveR(vector<vector<char>> &matrix, size_t row, size_t col) {
   Stack s;
   int counter = 0;
   char temp;
@@ -85,37 +120,7 @@ void moveL(vector<vector<char>> &matrix, size_t row,
     for (int i = 0; i < row; i++) {
       if (matrix[i][j] != 'O' && matrix[i][j] != 'X') {
         if (!s.isEmpty() && s.peek() == 'B') {
-          temp = s.pop();
-          s.push('X');
-        } else
-          s.push(matrix[i][j]);
-      } else if (matrix[i][j] == 'X') {
-        while (s.getSize() < counter) s.push('O');
-        s.push('X');
-      }
-      counter++;
-    }
-
-    while (s.getSize() < counter) s.push('O');
-
-    for (int i = row - 1; i >= 0; i--) matrix[i][j] = s.pop();
-
-    counter = 0;
-  }
-}
-
-void moveR(vector<vector<char>> &matrix, size_t row,
-           size_t col)  // Need to implement
-{
-  Stack s;
-  int counter = 0;
-  char temp;
-
-  for (int j = 0; j < col; j++) {
-    for (int i = 0; i < row; i++) {
-      if (matrix[i][j] != 'O' && matrix[i][j] != 'X') {
-        if (!s.isEmpty() && s.peek() == 'B') {
-          temp = s.pop();
+          s.pop();
           s.push('X');
         } else
           s.push(matrix[i][j]);
@@ -207,20 +212,24 @@ int main(int argc, char *argv[]) {
   Queue q;
   q.enqueue(temp);
 
-  while (!q.isEmpty()) {
-    temp = q.dequeue();
-    if (isSolved(temp.matrix, row, col)) {
-      if (temp.moves == "")
-        cout << 0;
-      else
-        cout << temp.moves;
-    } else {
-      addPath(q, temp, 1, row, col);
-      addPath(q, temp, 2, row, col);
-      addPath(q, temp, 3, row, col);
-      addPath(q, temp, 4, row, col);
-    }
-  }
+  print(matrix);
+  moveL(matrix, row, col);
+  print(matrix);
+
+  // while (!q.isEmpty()) {
+  //   temp = q.dequeue();
+  //   if (isSolved(temp.matrix, row, col)) {
+  //     if (temp.moves == "")
+  //       cout << 0;
+  //     else
+  //       cout << temp.moves;
+  //   } else {
+  //     addPath(q, temp, 1, row, col);
+  //     addPath(q, temp, 2, row, col);
+  //     addPath(q, temp, 3, row, col);
+  //     addPath(q, temp, 4, row, col);
+  //   }
+  // }
 
   return 0;
 }
