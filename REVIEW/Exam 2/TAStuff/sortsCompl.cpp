@@ -1,7 +1,9 @@
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <queue>
 #include <string>
+
 
 // ty fam
 using namespace std;
@@ -23,7 +25,6 @@ void bubbleSortV1(int* arr, int length) {
     }
   }
 }
-
 
 void bubbleSortV2(int* arr, int length) {
   for (int i = length - 1; i >= 1; i--) {
@@ -271,7 +272,7 @@ void heapSort(int* arr, int size) {
   buildHeap(arr, size);
   for (int i = size - 1; i >= 0; i--) {
     swap(arr[i], arr[0]);
-    // print(arr, size);
+    print(arr, size);
     heapify(arr, 0, i - 1);
     // print(arr, size);
     // cout<<endl;

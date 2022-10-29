@@ -77,7 +77,7 @@ void mergeSort(int *arr, int low, int high) {
   }
 }
 
-int partition(int *arr, int left, int right) {
+int partitionRight(int *arr, int left, int right) {
   int partIndex = left;
   int pivot = arr[right];
   int l = left;
@@ -95,9 +95,21 @@ int partition(int *arr, int left, int right) {
   return partIndex;
 }
 
+int partitionLeft(int *arr, int start, int end) {
+  int pivot = start;
+  for (int i = start + 1; i <= end; i++) {
+    if (arr[i] < arr[start]) {
+      pivot++;
+      swap(arr[i], arr[pivot]);  // important
+    }
+  }
+  swap(arr[start], arr[pivot]);
+  return pivot;
+}
+
 void quickSort(int *arr, int left, int right) {
   if (left < right) {
-    int pivot = partition(arr, left, right);
+    int pivot = partitionLeft(arr, left, right);
     quickSort(arr, left, pivot - 1);
     quickSort(arr, pivot + 1, right);
   }
@@ -120,6 +132,8 @@ void bucketSort(int *arr, int n) {
   int index = 0;
   for (int x = 0; x < n; x++)
     for (int y = 0; y < buckets[x].size(); y++) arr[index++] = buckets[x][y];
+
+  delete[] buckets;
 }
 
 int findMax(int *arr, int length) {
@@ -133,8 +147,8 @@ int findMax(int *arr, int length) {
 void radixSort(int *arr, int n) {}
 
 void heapify(int *arr, int i, int size) {
-  int leftC = 2 * i + 1;
-  int rightC = 2 * i + 2;
+  int leftC = 2 * i + 1;   // Left child index
+  int rightC = 2 * i + 2;  // Right child index
   int largest = i;
 
   // If left child INDEX is larger than root value,
@@ -164,8 +178,13 @@ bool isHeap(int *arr, int size) {
   return true;
 }
 
-void heapSort(int *arr, int size) { buildHeap(arr, size); }
-
+void heapSort(int *arr, int size) {
+  buildHeap(arr, size);
+  for (int i = size - 1; i > 0; i--) {
+    swap(arr[i], arr[0]);
+    heapify(arr, 0, i);
+  }
+}
 void shellSort(int *arr) {}
 
 int main() {
@@ -178,8 +197,8 @@ int main() {
   }
   cout << "\n\n";
 
-  // heapSort(arr, 10);
-  buildHeap(arr, 10);
+  heapSort(arr, 10);
+  // buildHeap(arr, 10);
   // insertionSort(arr, 10);
   // mergeSort(arr, 0, 9);
   // quickSort(arr, 0, 9);
@@ -187,7 +206,8 @@ int main() {
   // heapSort(arr, 0, 9);
   // radixSort(arr, 0 ,9);
 
-  cout << "After building heap: " << endl;
+  cout << "After heapSort: " << endl;
+  // cout << "After building heap: " << endl;
   // cout << "After insertionSort: " << endl;
   // cout << "After mergeSort: " << endl;
   // cout << "After quickSort: " << endl;
