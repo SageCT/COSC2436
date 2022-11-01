@@ -157,20 +157,21 @@ void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
   char temp;
 
   for (size_t j = 0; j < col; j++) {
-    for (signed long long int i = 0; i < row; i++) {
+    for (signed long long int i = row - 1; i > -1; i--) {
       if (matrix[i][j] == 'B') {
-        if (!b.isEmpty() && b.peek() == 'B') {
-          b.pop();
+        if (!s.isEmpty() && s.peek() == 'B') {
+          s.pop();
           s.push('X');
-        } else {
-          b.push(matrix[i][j]);
-        }
+        } else
+          s.push(matrix[i][j]);
+        while (s.getSize() < counter) s.push('O');
       } else if (matrix[i][j] == 'X') {
+        while (s.getSize() < counter) s.push('O');
         s.push('X');
       }
       counter++;
     }
-    while (!b.isEmpty()) s.push(b.pop());
+
     while (s.getSize() < counter) s.push('O');
 
     for (signed long long int i = 0; i < row; i++) matrix[i][j] = s.pop();
