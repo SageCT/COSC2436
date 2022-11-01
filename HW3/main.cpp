@@ -56,19 +56,19 @@ void moveU(vector<vector<char>> &matrix, size_t row, size_t col) {
 }
 
 void moveR(vector<vector<char>> &matrix, size_t row, size_t col) {
-  Stack s, r;
+  Stack s;
   int counter = 0;
   char temp;
 
-  // j = row, i = col
   for (size_t j = 0; j < row; j++) {
-    for (size_t i = 0; i < col; i++) {
+    for (signed long long int i = 0; i < col; i++) {
       if (matrix[j][i] == 'B') {
         if (!s.isEmpty() && s.peek() == 'B') {
           s.pop();
           s.push('X');
         } else
           s.push(matrix[j][i]);
+        while (s.getSize() < counter) s.push('O');
       } else if (matrix[j][i] == 'X') {
         while (s.getSize() < counter) s.push('O');
         s.push('X');
@@ -78,81 +78,14 @@ void moveR(vector<vector<char>> &matrix, size_t row, size_t col) {
 
     while (s.getSize() < counter) s.push('O');
 
-    for (int i = col - 1; i >= 0; i--) matrix[j][i] = s.pop();
+    for (signed long long int i = col; i > -1; i--) matrix[i][j] = s.pop();
 
     counter = 0;
   }
 }
 
 void moveD(vector<vector<char>> &matrix, size_t row, size_t col) {
-  Stack s, r;
-  int counter = 0;
-  char temp;
-
-  for (size_t j = 0; j < col; j++) {
-    for (size_t i = 0; i < row; i++) {
-      if (matrix[i][j] == 'B') {
-        if (!s.isEmpty() && s.peek() == 'B') {
-          s.pop();
-          s.push('X');
-        } else
-          s.push(matrix[i][j]);
-      } else if (matrix[i][j] == 'X') {
-        while (s.getSize() < counter) s.push('O');
-        s.push('X');
-      }
-      counter++;
-    }
-
-    while (s.getSize() < counter) s.push('O');
-
-    for (int i = row - 1; i >= 0; i--) matrix[i][j] = s.pop();
-
-    counter = 0;
-  }
-}
-
-void moveL(vector<vector<char>> &matrix, size_t row, size_t col) {
-  Stack s, r, t;
-  int counter = 0;
-  char temp;
-
-  // j = col, i = row
-  for (size_t j = 0; j < col; j++) {
-    for (size_t i = 0; i < row; i++) {
-      if (matrix[i][j] == 'B') {
-        if (!s.isEmpty() && s.peek() == 'B') {
-          s.pop();
-          s.push('X');
-        } else {
-          t.push('B');
-          for (int x = i + 2; x < row; x++) {
-            if (matrix[x][j] != 'X') {
-              t.push('O');
-            } else {
-              t.push('X');
-            }
-          }
-          while (!t.isEmpty()) s.push(t.pop());
-        }
-      } else if (matrix[i][j] == 'X') {
-        while (s.getSize() < counter) s.push('O');
-        s.push('X');
-      }
-      counter++;
-    }
-
-    while (s.getSize() < counter) s.push('O');
-    while (!s.isEmpty()) r.push(s.pop());
-
-    for (int i = 0; i <= col - 1; i++) matrix[i][j] = r.pop();
-
-    counter = 0;
-  }
-}
-
-void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
-  Stack s, b;
+  Stack s;
   int counter = 0;
   char temp;
 
@@ -175,6 +108,64 @@ void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
     while (s.getSize() < counter) s.push('O');
 
     for (signed long long int i = 0; i < row; i++) matrix[i][j] = s.pop();
+
+    counter = 0;
+  }
+}
+
+void moveL(vector<vector<char>> &matrix, size_t row, size_t col) {
+  Stack s;
+  int counter = 0;
+  char temp;
+
+  for (size_t j = 0; j < row; j++) {
+    for (size_t i = 0; i < col; i++) {
+      if (matrix[j][i] == 'B') {
+        if (!s.isEmpty() && s.peek() == 'B') {
+          s.pop();
+          s.push('X');
+        } else
+          s.push(matrix[j][i]);
+        while (s.getSize() < counter) s.push('O');
+      } else if (matrix[j][i] == 'X') {
+        while (s.getSize() < counter) s.push('O');
+        s.push('X');
+      }
+      counter++;
+    }
+
+    while (s.getSize() < counter) s.push('O');
+
+    for (signed long long int i = col - 1; i > -1; i--) matrix[j][i] = s.pop();
+
+    counter = 0;
+  }
+}
+
+void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
+  Stack s;
+  int counter = 0;
+  char temp;
+
+  for (size_t j = 0; j < row; j++) {
+    for (size_t i = 0; i < col; i++) {
+      if (matrix[j][i] == 'B') {
+        if (!s.isEmpty() && s.peek() == 'B') {
+          s.pop();
+          s.push('X');
+        } else
+          s.push(matrix[j][i]);
+        while (s.getSize() < counter) s.push('O');
+      } else if (matrix[j][i] == 'X') {
+        while (s.getSize() < counter) s.push('O');
+        s.push('X');
+      }
+      counter++;
+    }
+
+    while (s.getSize() < counter) s.push('O');
+
+    for (signed long long int i = col - 1; i > -1; i--) matrix[j][i] = s.pop();
 
     counter = 0;
   }
@@ -233,7 +224,7 @@ int main(int argc, char *argv[]) {
   // ifstream input(am.get("input"));
   // ofstream output(am.get("output"));
 
-  ifstream input("test.txt");
+  ifstream input("input1.txt");
   ofstream output("output1.txt");
 
   size_t row;
