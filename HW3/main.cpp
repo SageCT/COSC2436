@@ -32,7 +32,7 @@ void moveU(vector<vector<char>> &matrix, size_t row, size_t col) {
   char temp;
 
   for (size_t j = 0; j < col; j++) {
-    for (signed long long int i = row - 1; i > -1; i--) {
+    for (size_t i = 0; i < row; i++) {
       if (matrix[i][j] == 'B') {
         if (!s.isEmpty() && s.peek() == 'B') {
           s.pop();
@@ -61,7 +61,7 @@ void moveR(vector<vector<char>> &matrix, size_t row, size_t col) {
   char temp;
 
   for (size_t j = 0; j < row; j++) {
-    for (signed long long int i = 0; i < col; i++) {
+    for (signed long long int i = col - 1; i > -1; i--) {
       if (matrix[j][i] == 'B') {
         if (!s.isEmpty() && s.peek() == 'B') {
           s.pop();
@@ -78,7 +78,7 @@ void moveR(vector<vector<char>> &matrix, size_t row, size_t col) {
 
     while (s.getSize() < counter) s.push('O');
 
-    for (signed long long int i = col; i > -1; i--) matrix[i][j] = s.pop();
+    for (size_t i = 0; i < col; i++) matrix[j][i] = s.pop();
 
     counter = 0;
   }
@@ -148,7 +148,7 @@ void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
   char temp;
 
   for (size_t j = 0; j < row; j++) {
-    for (size_t i = 0; i < col; i++) {
+    for (signed long long int i = col - 1; i > -1; i--) {
       if (matrix[j][i] == 'B') {
         if (!s.isEmpty() && s.peek() == 'B') {
           s.pop();
@@ -165,7 +165,7 @@ void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
 
     while (s.getSize() < counter) s.push('O');
 
-    for (signed long long int i = col - 1; i > -1; i--) matrix[j][i] = s.pop();
+    for (size_t i = 0; i < col; i++) matrix[j][i] = s.pop();
 
     counter = 0;
   }
@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
   // ifstream input(am.get("input"));
   // ofstream output(am.get("output"));
 
-  ifstream input("input1.txt");
+  ifstream input("test.txt");
   ofstream output("output1.txt");
 
   size_t row;
@@ -253,7 +253,7 @@ int main(int argc, char *argv[]) {
   q.enqueue(temp);
 
   print(matrix);
-  moveTest(matrix, row, col);
+  moveR(matrix, row, col);
   print(matrix);
 
   // while (!q.isEmpty()) {
