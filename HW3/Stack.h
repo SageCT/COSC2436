@@ -3,8 +3,8 @@
 #include <iostream>
 using namespace std;
 
-// This file is provided to assist with the hw, but you can change or implement the solution in your own way.
-// Hint: use stack to shift the matrix.
+// This file is provided to assist with the hw, but you can change or implement
+// the solution in your own way. Hint: use stack to shift the matrix.
 
 struct sNode {
   char data;
@@ -12,11 +12,11 @@ struct sNode {
 };
 
 class Stack {
-private:
+ private:
   sNode *top;
   int size;
 
-public:
+ public:
   Stack();
   bool isEmpty();
   void push(char);
