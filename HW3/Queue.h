@@ -4,8 +4,9 @@
 #include <vector>
 using namespace std;
 
-// This file is provided to assist with the hw, but you can change or implement the solution in your own way.
-// Hint: use queue to keep track of the matrix and the moves for the matrix.
+// This file is provided to assist with the hw, but you can change or implement
+// the solution in your own way. Hint: use queue to keep track of the matrix and
+// the moves for the matrix.
 
 struct Pair {
   vector<vector<char>> matrix;
@@ -18,15 +19,16 @@ struct qNode {
 };
 
 class Queue {
-private:
+ private:
   qNode *front;
   qNode *rear;
 
-public:
+ public:
   Queue();
   bool isEmpty();
   void enqueue(Pair);
   Pair dequeue();
+  Pair peek() { return front->data; };
 };
 
 Queue::Queue() {

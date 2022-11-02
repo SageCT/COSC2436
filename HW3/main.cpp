@@ -39,7 +39,6 @@ void moveU(vector<vector<char>> &matrix, size_t row, size_t col) {
           s.push('X');
         } else
           s.push(matrix[i][j]);
-        while (s.getSize() < counter) s.push('O');
       } else if (matrix[i][j] == 'X') {
         while (s.getSize() < counter) s.push('O');
         s.push('X');
@@ -68,7 +67,6 @@ void moveR(vector<vector<char>> &matrix, size_t row, size_t col) {
           s.push('X');
         } else
           s.push(matrix[j][i]);
-        while (s.getSize() < counter) s.push('O');
       } else if (matrix[j][i] == 'X') {
         while (s.getSize() < counter) s.push('O');
         s.push('X');
@@ -97,7 +95,6 @@ void moveD(vector<vector<char>> &matrix, size_t row, size_t col) {
           s.push('X');
         } else
           s.push(matrix[i][j]);
-        while (s.getSize() < counter) s.push('O');
       } else if (matrix[i][j] == 'X') {
         while (s.getSize() < counter) s.push('O');
         s.push('X');
@@ -126,7 +123,6 @@ void moveL(vector<vector<char>> &matrix, size_t row, size_t col) {
           s.push('X');
         } else
           s.push(matrix[j][i]);
-        while (s.getSize() < counter) s.push('O');
       } else if (matrix[j][i] == 'X') {
         while (s.getSize() < counter) s.push('O');
         s.push('X');
@@ -142,90 +138,58 @@ void moveL(vector<vector<char>> &matrix, size_t row, size_t col) {
   }
 }
 
-void moveTest(vector<vector<char>> &matrix, size_t row, size_t col) {
-  Stack s;
-  int counter = 0;
-  char temp;
-
-  for (size_t j = 0; j < row; j++) {
-    for (signed long long int i = col - 1; i > -1; i--) {
-      if (matrix[j][i] == 'B') {
-        if (!s.isEmpty() && s.peek() == 'B') {
-          s.pop();
-          s.push('X');
-        } else
-          s.push(matrix[j][i]);
-        while (s.getSize() < counter) s.push('O');
-      } else if (matrix[j][i] == 'X') {
-        while (s.getSize() < counter) s.push('O');
-        s.push('X');
-      }
-      counter++;
-    }
-
-    while (s.getSize() < counter) s.push('O');
-
-    for (size_t i = 0; i < col; i++) matrix[j][i] = s.pop();
-
-    counter = 0;
-  }
-}
-
-void addPath(Queue &q, Pair p, int move, size_t row, size_t col) {
+bool addPath(Queue &q, Pair p, int move, size_t row, size_t col) {
   Pair temp;
   temp.matrix = p.matrix;
   temp.moves = p.moves;
 
-  cout << "Before Move: " << endl;
-  print(temp.matrix);
-
   switch (move) {
     case 1:
       moveU(temp.matrix, row, col);
-      cout << "After MoveU: " << endl;
       if (temp.matrix != p.matrix) {
         temp.moves += "1";
         q.enqueue(temp);
+        return true;
       }
       break;
 
     case 2:
       moveR(temp.matrix, row, col);
-      cout << "After MoveR: " << endl;
       if (temp.matrix != p.matrix) {
         temp.moves += "2";
         q.enqueue(temp);
+        return true;
       }
       break;
 
     case 3:
       moveD(temp.matrix, row, col);
-      cout << "After MoveD: " << endl;
       if (temp.matrix != p.matrix) {
         temp.moves += "3";
         q.enqueue(temp);
+        return true;
       }
       break;
 
     case 4:
       moveL(temp.matrix, row, col);
-      cout << "After MoveL: " << endl;
       if (temp.matrix != p.matrix) {
         temp.moves += "4";
         q.enqueue(temp);
+        return true;
       }
       break;
   }
-  print(temp.matrix);
+  return false;
 }
 
 int main(int argc, char *argv[]) {
-  // ArgumentManager am(argc, argv);
-  // ifstream input(am.get("input"));
-  // ofstream output(am.get("output"));
+  ArgumentManager am(argc, argv);
+  ifstream input(am.get("input"));
+  ofstream output(am.get("output"));
 
-  ifstream input("test.txt");
-  ofstream output("output1.txt");
+  // ifstream input("test1.txt");
+  // ofstream output("output1.txt");
 
   size_t row;
   size_t col;
@@ -252,51 +216,20 @@ int main(int argc, char *argv[]) {
   Queue q;
   q.enqueue(temp);
 
-  print(matrix);
-  moveR(matrix, row, col);
-  print(matrix);
+  while (!q.isEmpty()) {
+    temp = q.dequeue();
+    if (isSolved(temp.matrix, row, col))
+      break;
+    else {
+      addPath(q, temp, 1, row, col);
+      addPath(q, temp, 2, row, col);
+      addPath(q, temp, 3, row, col);
+      addPath(q, temp, 4, row, col);
+    }
+  }
 
-  // while (!q.isEmpty()) {
-  //   temp = q.dequeue();
-  //   if (isSolved(temp.matrix, row, col)) {
-  //     if (temp.moves == "") {
-  //       cout << 0;
-  //     } else {
-  //       cout << temp.moves;
-  //     }
-  //   } else {
-  //     string change = temp.moves; 123
-  //     if (change.back() != '1')
-  //       addPath(q, temp, 1, row, col);
-  //     else if (change.back() != '2')
-  //       addPath(q, temp, 2, row, col);
-  //     else if (change.back() != '3')
-  //       addPath(q, temp, 3, row, col);
-  //     else if (change.back() != '4')
-  //       addPath(q, temp, 4, row, col);
-  //   }
-  // }
-
-  // for (int i = temp.moves.length() - 1; i > -1; i--) {
-
-  //   char c = temp.moves[i];
-  //   cout << c << endl;
-  //   switch (c) {
-  //     case '1':
-  //       moveU(temp.matrix, row, col);
-  //       break;
-  //     case '2':
-  //       moveD(temp.matrix, row, col);
-  //       break;
-  //     case '3':
-  //       moveL(temp.matrix, row, col);
-  //       break;
-  //     case '4':
-  //       moveR(temp.matrix, row, col);
-  //       break;
-  //   }
-  //   print(temp.matrix);
-  // }
+  // print(temp.matrix);
+  output << temp.moves;
 
   return 0;
 }
