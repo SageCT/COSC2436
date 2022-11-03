@@ -1,0 +1,13 @@
+REPLACE:[#,s](2)
+DECODE:[?vi#fzm2f##faf@2zvaf#zbf22nfz42fcfo424](1)
+REPLACE:[f,e](5)
+REPLACE:[?,t](1)
+SWAP:[f,2](4)
+BST:(7)
+ADD:[@,g](1)
+REMOVE:[@](6)
+REPLACE:[z, ](4)
+REMOVE:[2](6)
+REPLACE:[4,d](6)
+REPLACE:[v,h](3)
+Inorder

@@ -1,0 +1,3 @@
+This Message was mostly numbers
+This one was made up of only symbols
+This message will only be affected by letter to letter replacements
