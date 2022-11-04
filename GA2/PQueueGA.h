@@ -27,7 +27,7 @@ public:
 			front = temp;
 		}
 		else {
-			while (curr->next != nullptr && curr->next->ans < temp->ans) {
+			while (curr->next != nullptr && curr->next->ans <= temp->ans) {
 				curr = curr->next;
 			}
 			temp->next = curr->next;
@@ -44,4 +44,4 @@ public:
 	}
 };
 
-#endif PQUEUEGA_H
+#endif
