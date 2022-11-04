@@ -9,14 +9,6 @@
 
 using namespace std;
 
-bool comparator(string a, string b) {
-  for (int i = 0; i < a.length(); i++) {
-    if (a[i] != b[i]) {
-      return a[i] < b[i];
-    }
-  }
-}
-
 int main(int argc, char *argv[]) {
   //   ArgumentManager am(argc, argv);
   //   ifstream input(am.get("input"));
@@ -39,25 +31,34 @@ int main(int argc, char *argv[]) {
       // Split the input into a vector of strings, strings separated by spaces
       string toAdd;
       for (auto c : in) {
-        if (c == ' ') {
+        if (c == ' ' || c == '.') {
           words.push_back(toAdd);
           toAdd = "";
         } else
-          toAdd += c;
+          toAdd.push_back(tolower(c));
       }
 
-      sort(words.begin(), words.end(), comparator);
+      sort(words.begin(), words.end());
 
       for (auto w : words) {
-        cout << w << " ";
-        // if (wordMap.find(w) == wordMap.end()) {
-        //   wordMap.insert(pair<string, int>(w, 1));
-        // } else {
-        //   // wordMap.insert_or_assign(w, wordMap.at(w) + 1);
-        // }
+        if (wordMap.find(w) == wordMap.end()) {
+          wordMap.insert(pair<string, int>(w, 1));
+        } else {
+          int num = 0;
+          for (auto it = wordMap.begin(); it != wordMap.end(); it++) {
+            if (it->first == w) {
+              num = it->second;
+              wordMap.erase(it);
+              break;
+            }
+          }
+          wordMap.insert(pair<string, int>(w, ++num));
+        }
       }
-      for (auto w : wordMap) {
-        output << w.first << " " << w.second << endl;
+      for (auto itr = wordMap.begin(); itr != wordMap.end(); itr++) {
+        itr == --wordMap.end()
+            ? output << itr->first << ": " << itr->second
+            : output << itr->first << ": " << itr->second << endl;
       }
     }
   }
