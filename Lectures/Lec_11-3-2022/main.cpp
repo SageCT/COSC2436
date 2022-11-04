@@ -8,10 +8,9 @@
 #include "tree.h"
 
 int main() {
-  tree apple;
-  apple.insert(5);
+  // tree apple;
+  // apple.insert(5);
 
-  apple.inOrderTrav(apple.getRoot());
-
+  // apple.inOrderTrav(apple.getRoot());
   return 0;
 }

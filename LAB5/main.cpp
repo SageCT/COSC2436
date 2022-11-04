@@ -9,6 +9,14 @@
 
 using namespace std;
 
+bool comparator(string a, string b) {
+  for (int i = 0; i < a.length(); i++) {
+    if (a[i] != b[i]) {
+      return a[i] < b[i];
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
   //   ArgumentManager am(argc, argv);
   //   ifstream input(am.get("input"));
@@ -38,16 +46,17 @@ int main(int argc, char *argv[]) {
           toAdd += c;
       }
 
-      sort(words.begin(), words.end());
+      sort(words.begin(), words.end(), comparator);
 
       for (auto w : words) {
-        if(wordMap.find(w) == wordMap.end()) {
-          wordMap.insert_or_assign(w, 1);
-        } else {
-          wordMap.insert_or_assign(w, wordMap.at(w) + 1);
-        }
+        cout << w << " ";
+        // if (wordMap.find(w) == wordMap.end()) {
+        //   wordMap.insert(pair<string, int>(w, 1));
+        // } else {
+        //   // wordMap.insert_or_assign(w, wordMap.at(w) + 1);
+        // }
       }
-      for(auto w : wordMap) {
+      for (auto w : wordMap) {
         output << w.first << " " << w.second << endl;
       }
     }

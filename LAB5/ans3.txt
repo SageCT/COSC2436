@@ -19,7 +19,7 @@ in: 1
 inside: 1
 involved: 1
 it: 3
-it’s: 1
+it's: 1
 kept: 2
 knew: 2
 man: 1
