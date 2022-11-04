@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
   // ifstream input("input3.txt");
   // ofstream output("output1.txt");
 
-  vector<string> words, inputs;
+  vector<string> words;
   map<string, int> wordMap;
 
   string in = "";
