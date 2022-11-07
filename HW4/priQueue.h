@@ -1,3 +1,5 @@
+#ifndef PRIQUEUE_H
+#define PRIQUEUE_H
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
@@ -9,7 +11,7 @@ using namespace std;
 
 struct item {
   string cmd;
-  double priority;
+  int priority;
 };
 
 class priQueue {
@@ -61,3 +63,5 @@ string priQueue::pop() {
   }
   return "-1";
 }
+
+#endif
