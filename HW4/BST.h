@@ -20,6 +20,8 @@ class BST {
  private:
   node *root;
   string mode;
+
+  void destructorHelper(node *);
   void inOrderTrav(node *) const;
   void preOrderTrav(node *) const;
   void postOrderTrav(node *) const;
@@ -27,9 +29,9 @@ class BST {
  public:
   BST() : root(nullptr), mode("inOrder"){};
   BST(string s) : root(nullptr), mode(s){};
-  ~BST(){};
+  ~BST();
 
-  void insert(string);
+  bool insert(string s, node *&source);
   void del(string);
   void search(string);
 
@@ -42,6 +44,34 @@ class BST {
 };
 
 using namespace std;
+
+BST::~BST() {
+  if (root != nullptr) destructorHelper(root);
+}
+
+void BST::destructorHelper(node *source) {
+  if (source == nullptr) return;
+  destructorHelper(source->left);
+  destructorHelper(source->right);
+  delete source;
+}
+
+bool BST::insert(string s, node *&source) {
+  if (source == nullptr) {
+    source = new node();
+    source->val = s;
+    source->left = nullptr;
+    source->right = nullptr;
+  }
+
+  if (s.length() < source->val.length()) {
+    insert(s, source->left);
+  } else if (s.length() > source->val.length()) {
+    insert(s, source->right);
+  } else if (s.length() == source->val.length()) {
+    source->val = s;
+  }
+}
 
 void BST::inOrderTrav(node *cu) const {
   if (cu == nullptr) return;

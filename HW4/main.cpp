@@ -21,21 +21,18 @@ bool digitHere(string s) {
   return false;
 }
 
-void addToQueue(string s) {
+void addToQueue(string s, BST &b) {
   if (digitHere(s)) {
     // Placing the priority in queue
+
+    // Finding the priority
     int pri = stoi(s.substr(s.length() - 2, 1));
+    // finding the command
     string cmd = s.substr(0, s.length() - (s.length() - s.find(']') - 1));
     q.push(cmd, pri);
   } else {
-    if (s == "Preorder") {
-    }
-
-    else if (s == "Inorder") {
-    }
-
-    else if (s == "Postorder") {
-    }
+    // Set the BST traversal mode
+    b.setMode(s);
   }
 }
 
@@ -46,20 +43,47 @@ void DECODE() {
   messages.push(s);
 }
 
-void REPLACE(char curC, char newC) {}
+void REPLACE(char curC, char newC) {
+  string s = messages.front();
+  messages.pop();
+  for (int i = 0; i < s.length(); i++)
+    if (s[i] == curC) s[i] = newC;
+  messages.push(s);
+}
 
-void ADD(char curC, char newC) {}
+void ADD(char curC, char newC) {
+  string s = messages.front();
+  messages.pop();
+  for (int i = 0; i < s.length(); i++)
+    if (s[i] == curC) s.insert(i + 1, 1, newC);
+  messages.push(s);
+}
 
-void REMOVE(char c) {}
+void REMOVE(char c) {
+  string s = messages.front();
+  messages.pop();
+  for (int i = 0; i < s.length(); i++)
+    if (s[i] == c) s.erase(i, 1);
+  messages.push(s);
+}
 
-void SWAP(char a, char b) {}
+void SWAP(char a, char b) {
+  string s = messages.front();
+  messages.pop();
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == a)
+      s[i] = b;
+    else if (s[i] == b)
+      s[i] = a;
+  }
+  messages.push(s);
+}
 
-void DECODEMESSAGE() {
+void DECODEMESSAGES() {
   string s;
   while (q.top() != "-1") {
     s = q.pop();
     if (s.find("DECODE") != string::npos) {
-      addToQueue(s);
       DECODE();
     } else if (s.find("REPLACE") != string::npos)
       REPLACE(s[10], s[12]);
@@ -72,7 +96,7 @@ void DECODEMESSAGE() {
   }
 }
 
-void addToBST(string s) {}
+void addToBST(string s, BST &b) {}
 
 int main(int argc, char *argv[]) {
   //   ArgumentManager am(argc, argv);
@@ -81,13 +105,18 @@ int main(int argc, char *argv[]) {
 
   ifstream input("input1.txt");
   ofstream output("output1.txt");
-  vector<string> cmds;
 
   string s = "";
+  BST bst;
 
   while (input.peek() != EOF) {
     getline(input, s);
-    addToQueue(s);
+    addToQueue(s, bst);
   }
-  DECODE();
+  DECODEMESSAGES();
+
+  while (!messages.empty()) {
+    addToBST(messages.front(), bst);
+    messages.pop();
+  }
 }
