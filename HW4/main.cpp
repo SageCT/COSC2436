@@ -24,62 +24,70 @@ bool digitHere(string s) {
 void addToBST(string s, BST &b) { b.insert(s); }
 
 void addToQueue(string s, BST &b) {
-  if (digitHere(s)) {
-    // Placing the priority in queue
-
+  if (s.find("BST") == string::npos && s.find("order") == string::npos) {
     // Finding the priority
     int pri = stoi(s.substr(s.length() - 2, 1));
+
     // finding the command
     string cmd = s.substr(0, s.length() - (s.length() - s.find(']') - 1));
-    cout << "Adding cmd: " << cmd << " with priority: " << pri << endl;
     q.push(cmd, pri);
-  } else {
-    // Set the BST traversal mode
+  } else if (s.find("BST") != string::npos && s.find("order") == string::npos) {
+    // Placing the BST command in queue
+    int pri = stoi(s.substr(s.length() - 2, 1));
+    string cmd = s.substr(0, 3);
+    q.push(cmd, pri);
+  } else if (s.find("order") != string::npos)
     b.setMode(s);
-  }
 }
 
-void DECODE() {
-  string s = q.pop();
+void DECODE(string s) {
   s = s.substr(s.find('[') + 1,
                (s.length() - s.find('[') - (s.length() - s.find(']'))) - 1);
   msgs.push(s);
 }
 
 void REPLACE(char curC, char newC) {
-  string s = msgs.front();
-  msgs.pop();
-  for (int i = 0; i < s.length(); i++)
-    if (s[i] == curC) s[i] = newC;
-  msgs.push(s);
+  if (!msgs.empty()) {
+    string s = msgs.front();
+    msgs.pop();
+    for (int i = 0; i < s.length(); i++)
+      if (s[i] == curC) s[i] = newC;
+    msgs.push(s);
+  }
 }
 
 void ADD(char curC, char newC) {
-  string s = msgs.front();
-  msgs.pop();
-  for (int i = 0; i < s.length(); i++)
-    if (s[i] == curC) s.insert(i + 1, 1, newC);
-  msgs.push(s);
+  if (!msgs.empty()) {
+    string s = msgs.front();
+    msgs.pop();
+    for (int i = 0; i < s.length(); i++)
+      if (s[i] == curC) s.insert(i + 1, 1, newC);
+    msgs.push(s);
+  }
 }
 
 void REMOVE(char c) {
-  string s = msgs.front();
-  msgs.pop();
-  for (int i = 0; i < s.length(); i++)
-    if (s[i] == c) s.erase(i, 1);
-  msgs.push(s);
+  if (!msgs.empty()) {
+    string s = msgs.front();
+    msgs.pop();
+    for (int i = 0; i < s.length(); i++)
+      if (s[i] == c) s.erase(i, 1);
+    msgs.push(s);
+  }
 }
 
 void SWAP(char a, char b) {
-  string s = msgs.front();
-  msgs.pop();
-  for (int i = 0; i < s.length(); i++) {
-    if (s[i] == a)
-      s[i] = b;
-    else if (s[i] == b)
-      s[i] = a;
+  if (!msgs.empty()) {
+    string s = msgs.front();
+    msgs.pop();
+    for (int i = 0; i < s.length(); i++) {
+      if (s[i] == a)
+        s[i] = b;
+      else if (s[i] == b)
+        s[i] = a;
+    }
+    msgs.push(s);
   }
-  msgs.push(s);
 }
 
 void DECODEMESSAGES(BST &b, ofstream &o) {
@@ -88,7 +96,7 @@ void DECODEMESSAGES(BST &b, ofstream &o) {
     s = q.pop();
 
     if (s.find("DECODE") != string::npos) {
-      DECODE();
+      DECODE(s);
       cout << "DECODE: " << s << endl;
     } else if (s.find("REPLACE") != string::npos) {
       cout << "REPLACE: " << s[9] << s[11] << endl;
@@ -104,15 +112,17 @@ void DECODEMESSAGES(BST &b, ofstream &o) {
       cout << "SWAP: " << s[6] << s[8] << endl;
       SWAP(s[6], s[8]);
     } else if (s.find("BST") != string::npos) {
-      cout << "ADDING TO BST: " << s << endl;
-      addToBST(msgs.front(), b);
-      msgs.pop();
+      if (msgs.front() != "") {
+        cout << "ADDING TO BST: " << msgs.front() << endl;
+        addToBST(msgs.front(), b);
+        msgs.pop();
+      }
     } else if (s == "Inorder" || s == "Preorder" || s == "Postorder") {
       if (s == "Inorder")
         b.inOrderTrav(o);
       else if (s == "Preorder")
         b.preOrderTrav(o);
-      else
+      else if (s == "Postorder")
         b.postOrderTrav(o);
     }
   }
@@ -123,7 +133,7 @@ int main(int argc, char *argv[]) {
   //   ifstream input(am.get("input"));
   //   ofstream output(am.get("output"));
 
-  ifstream input("input1.txt");
+  ifstream input("input2.txt");
   ofstream output("output1.txt");
 
   string s = "";

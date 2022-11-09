@@ -39,6 +39,7 @@ class BST {
 
   node *getRoot() const { return root; };
   void setMode(string s) { mode = s; };
+  string getMode() const { return mode; };
   void inOrderTrav(ofstream &o) { inOrderTrav(root, o); };
   void preOrderTrav(ofstream &o) { preOrderTrav(root, o); };
   void postOrderTrav(ofstream &o) { postOrderTrav(root, o); };
@@ -92,6 +93,5 @@ void BST::postOrderTrav(node *cu, ofstream &o) {
   postOrderTrav(cu->right, o);
   o << cu->val << " ";
 }
-
 
 #endif
