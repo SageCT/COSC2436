@@ -31,6 +31,7 @@ void addToQueue(string s, BST &b) {
     int pri = stoi(s.substr(s.length() - 2, 1));
     // finding the command
     string cmd = s.substr(0, s.length() - (s.length() - s.find(']') - 1));
+    cout << "Adding cmd: " << cmd << " with priority: " << pri << endl;
     q.push(cmd, pri);
   } else {
     // Set the BST traversal mode
@@ -88,15 +89,22 @@ void DECODEMESSAGES(BST &b, ofstream &o) {
 
     if (s.find("DECODE") != string::npos) {
       DECODE();
-    } else if (s.find("REPLACE") != string::npos)
-      REPLACE(s[10], s[12]);
-    else if (s.find("ADD") != string::npos)
+      cout << "DECODE: " << s << endl;
+    } else if (s.find("REPLACE") != string::npos) {
+      cout << "REPLACE: " << s[9] << s[11] << endl;
+      REPLACE(s[9], s[11]);
+    } else if (s.find("ADD") != string::npos) {
+      cout << "ADD: " << s[5] << s[7] << endl;
       ADD(s[5], s[7]);
-    else if (s.find("REMOVE") != string::npos)
+    } else if (s.find("REMOVE") != string::npos) {
+      cout << "REMOVE: " << s[8] << endl;
       REMOVE(s[8]);
-    else if (s.find("SWAP") != string::npos)
+
+    } else if (s.find("SWAP") != string::npos) {
+      cout << "SWAP: " << s[6] << s[8] << endl;
       SWAP(s[6], s[8]);
-    else if (s.find("BST") != string::npos) {
+    } else if (s.find("BST") != string::npos) {
+      cout << "ADDING TO BST: " << s << endl;
       addToBST(msgs.front(), b);
       msgs.pop();
     } else if (s == "Inorder" || s == "Preorder" || s == "Postorder") {
