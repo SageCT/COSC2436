@@ -23,9 +23,9 @@ class BST {
 
   void destructorHelper(node *);
 
-  void inOrderTrav(node *, ofstream &);
-  void preOrderTrav(node *, ofstream &);
-  void postOrderTrav(node *, ofstream &);
+  void inOrderTrav(node *, vector<string> &v);
+  void preOrderTrav(node *, vector<string> &v);
+  void postOrderTrav(node *, vector<string> &v);
   void insert(string s, node *&source);
 
  public:
@@ -40,9 +40,9 @@ class BST {
   node *getRoot() const { return root; };
   void setMode(string s) { mode = s; };
   string getMode() const { return mode; };
-  void inOrderTrav(ofstream &o) { inOrderTrav(root, o); };
-  void preOrderTrav(ofstream &o) { preOrderTrav(root, o); };
-  void postOrderTrav(ofstream &o) { postOrderTrav(root, o); };
+  void inOrderTrav(vector<string> &v) { inOrderTrav(root, v); };
+  void preOrderTrav(vector<string> &v) { preOrderTrav(root, v); };
+  void postOrderTrav(vector<string> &v) { postOrderTrav(root, v); };
 };
 
 BST::~BST() {
@@ -73,25 +73,25 @@ void BST::insert(string s, node *&source) {
   }
 }
 
-void BST::inOrderTrav(node *cu, ofstream &o) {
+void BST::inOrderTrav(node *cu, vector<string> &v) {
   if (cu == nullptr) return;
-  inOrderTrav(cu->left, o);
-  o << cu->val << " ";
-  inOrderTrav(cu->right, o);
+  inOrderTrav(cu->left, v);
+  v.push_back(cu->val);
+  inOrderTrav(cu->right, v);
 }
 
-void BST::preOrderTrav(node *cu, ofstream &o) {
+void BST::preOrderTrav(node *cu, vector<string> &v) {
   if (cu == nullptr) return;
-  o << cu->val << " ";
-  preOrderTrav(cu->left, o);
-  preOrderTrav(cu->right, o);
+  v.push_back(cu->val);
+  preOrderTrav(cu->left, v);
+  preOrderTrav(cu->right, v);
 }
 
-void BST::postOrderTrav(node *cu, ofstream &o) {
+void BST::postOrderTrav(node *cu, vector<string> &v) {
   if (cu == nullptr) return;
-  postOrderTrav(cu->left, o);
-  postOrderTrav(cu->right, o);
-  o << cu->val << " ";
+  postOrderTrav(cu->left, v);
+  postOrderTrav(cu->right, v);
+  v.push_back(cu->val);
 }
 
 #endif

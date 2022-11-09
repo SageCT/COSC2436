@@ -14,6 +14,7 @@ using namespace std;
 
 priQueue q;
 queue<string> msgs;
+vector<string> v;
 
 bool digitHere(string s) {
   for (int i = 0; i < s.length(); i++)
@@ -31,7 +32,7 @@ void addToQueue(string s, BST &b) {
     // finding the command
     string cmd = s.substr(0, s.length() - (s.length() - s.find(']') - 1));
     q.push(cmd, pri);
-  } else if (s.find("BST") != string::npos && s.find("order") == string::npos) {
+  } else if (s.find("BST") != string::npos || s.find("order") == string::npos) {
     // Placing the BST command in queue
     int pri = stoi(s.substr(s.length() - 2, 1));
     string cmd = s.substr(0, 3);
@@ -112,37 +113,53 @@ void DECODEMESSAGES(BST &b, ofstream &o) {
       cout << "SWAP: " << s[6] << s[8] << endl;
       SWAP(s[6], s[8]);
     } else if (s.find("BST") != string::npos) {
-      if (msgs.front() != "") {
+      if (!msgs.empty()) {
         cout << "ADDING TO BST: " << msgs.front() << endl;
         addToBST(msgs.front(), b);
         msgs.pop();
       }
     } else if (s == "Inorder" || s == "Preorder" || s == "Postorder") {
       if (s == "Inorder")
-        b.inOrderTrav(o);
+        b.inOrderTrav(v);
       else if (s == "Preorder")
-        b.preOrderTrav(o);
+        b.preOrderTrav(v);
       else if (s == "Postorder")
-        b.postOrderTrav(o);
+        b.postOrderTrav(v);
     }
   }
 }
 
-int main(int argc, char *argv[]) {
-  //   ArgumentManager am(argc, argv);
-  //   ifstream input(am.get("input"));
-  //   ofstream output(am.get("output"));
+void printBST(BST &b, vector<string> &v) {
+  if (b.getMode() == "Inorder")
+    b.inOrderTrav(v);
+  else if (b.getMode() == "Preorder")
+    b.preOrderTrav(v);
+  else if (b.getMode() == "Postorder")
+    b.postOrderTrav(v);
+}
 
-  ifstream input("input3.txt");
-  ofstream output("output1.txt");
+int main(int argc, char *argv[]) {
+  ArgumentManager am(argc, argv);
+  ifstream input(am.get("input"));
+  ofstream output(am.get("output"));
+
+  // ifstream input("input2.txt");
+  // ofstream output("output1.txt");
 
   string s = "";
   BST tree;
 
   while (input.peek() != EOF) {
     getline(input, s);
+    s.erase(remove(s.begin(), s.end(), '\n'), s.end());
+    s.erase(remove(s.begin(), s.end(), '\r'), s.end());
+
     addToQueue(s, tree);
   }
 
   DECODEMESSAGES(tree, output);
+  printBST(tree, v);
+
+  for (int i = 0; i < v.size(); i++)
+    i + 1 == v.size() ? output << v[i] : output << v[i] << endl;
 }
