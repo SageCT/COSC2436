@@ -22,28 +22,27 @@ class BST {
   string mode;
 
   void destructorHelper(node *);
-  void inOrderTrav(node *) const;
-  void preOrderTrav(node *) const;
-  void postOrderTrav(node *) const;
+
+  void inOrderTrav(node *, ofstream &);
+  void preOrderTrav(node *, ofstream &);
+  void postOrderTrav(node *, ofstream &);
+  void insert(string s, node *&source);
 
  public:
   BST() : root(nullptr), mode("inOrder"){};
   BST(string s) : root(nullptr), mode(s){};
   ~BST();
 
-  bool insert(string s, node *&source);
   void del(string);
   void search(string);
+  void insert(string s) { insert(s, root); }
 
   node *getRoot() const { return root; };
   void setMode(string s) { mode = s; };
-  void inOrderTrav(node *) const;
-  void preOrderTrav(node *) const;
-  void postOrderTrav(node *) const;
-  void modeTrav(node *) const;
+  void inOrderTrav(ofstream &o) { inOrderTrav(root, o); };
+  void preOrderTrav(ofstream &o) { preOrderTrav(root, o); };
+  void postOrderTrav(ofstream &o) { postOrderTrav(root, o); };
 };
-
-using namespace std;
 
 BST::~BST() {
   if (root != nullptr) destructorHelper(root);
@@ -56,7 +55,7 @@ void BST::destructorHelper(node *source) {
   delete source;
 }
 
-bool BST::insert(string s, node *&source) {
+void BST::insert(string s, node *&source) {
   if (source == nullptr) {
     source = new node();
     source->val = s;
@@ -73,35 +72,26 @@ bool BST::insert(string s, node *&source) {
   }
 }
 
-void BST::inOrderTrav(node *cu) const {
+void BST::inOrderTrav(node *cu, ofstream &o) {
   if (cu == nullptr) return;
-  inOrderTrav(cu->left);
-  cout << cu->val << " ";
-  inOrderTrav(cu->right);
+  inOrderTrav(cu->left, o);
+  o << cu->val << " ";
+  inOrderTrav(cu->right, o);
 }
 
-void BST::preOrderTrav(node *cu) const {
+void BST::preOrderTrav(node *cu, ofstream &o) {
   if (cu == nullptr) return;
-  cout << cu->val << " ";
-  preOrderTrav(cu->left);
-  preOrderTrav(cu->right);
+  o << cu->val << " ";
+  preOrderTrav(cu->left, o);
+  preOrderTrav(cu->right, o);
 }
 
-void BST::postOrderTrav(node *cu) const {
+void BST::postOrderTrav(node *cu, ofstream &o) {
   if (cu == nullptr) return;
-  postOrderTrav(cu->left);
-  postOrderTrav(cu->right);
-  cout << cu->val << " ";
+  postOrderTrav(cu->left, o);
+  postOrderTrav(cu->right, o);
+  o << cu->val << " ";
 }
 
-void BST::modeTrav(node *cu) const {
-  if (mode == "inOrder") {
-    inOrderTrav(cu);
-  } else if (mode == "preOrder") {
-    preOrderTrav(cu);
-  } else if (mode == "postOrder") {
-    postOrderTrav(cu);
-  }
-}
 
 #endif

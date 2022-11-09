@@ -13,13 +13,15 @@
 using namespace std;
 
 priQueue q;
-queue<string> messages;
+queue<string> msgs;
 
 bool digitHere(string s) {
   for (int i = 0; i < s.length(); i++)
     if (isdigit(s[i])) return true;
   return false;
 }
+
+void addToBST(string s, BST &b) { b.insert(s); }
 
 void addToQueue(string s, BST &b) {
   if (digitHere(s)) {
@@ -40,49 +42,50 @@ void DECODE() {
   string s = q.pop();
   s = s.substr(s.find('[') + 1,
                (s.length() - s.find('[') - (s.length() - s.find(']'))) - 1);
-  messages.push(s);
+  msgs.push(s);
 }
 
 void REPLACE(char curC, char newC) {
-  string s = messages.front();
-  messages.pop();
+  string s = msgs.front();
+  msgs.pop();
   for (int i = 0; i < s.length(); i++)
     if (s[i] == curC) s[i] = newC;
-  messages.push(s);
+  msgs.push(s);
 }
 
 void ADD(char curC, char newC) {
-  string s = messages.front();
-  messages.pop();
+  string s = msgs.front();
+  msgs.pop();
   for (int i = 0; i < s.length(); i++)
     if (s[i] == curC) s.insert(i + 1, 1, newC);
-  messages.push(s);
+  msgs.push(s);
 }
 
 void REMOVE(char c) {
-  string s = messages.front();
-  messages.pop();
+  string s = msgs.front();
+  msgs.pop();
   for (int i = 0; i < s.length(); i++)
     if (s[i] == c) s.erase(i, 1);
-  messages.push(s);
+  msgs.push(s);
 }
 
 void SWAP(char a, char b) {
-  string s = messages.front();
-  messages.pop();
+  string s = msgs.front();
+  msgs.pop();
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == a)
       s[i] = b;
     else if (s[i] == b)
       s[i] = a;
   }
-  messages.push(s);
+  msgs.push(s);
 }
 
-void DECODEMESSAGES() {
+void DECODEMESSAGES(BST &b, ofstream &o) {
   string s;
   while (q.top() != "-1") {
     s = q.pop();
+
     if (s.find("DECODE") != string::npos) {
       DECODE();
     } else if (s.find("REPLACE") != string::npos)
@@ -93,10 +96,19 @@ void DECODEMESSAGES() {
       REMOVE(s[8]);
     else if (s.find("SWAP") != string::npos)
       SWAP(s[6], s[8]);
+    else if (s.find("BST") != string::npos) {
+      addToBST(msgs.front(), b);
+      msgs.pop();
+    } else if (s == "Inorder" || s == "Preorder" || s == "Postorder") {
+      if (s == "Inorder")
+        b.inOrderTrav(o);
+      else if (s == "Preorder")
+        b.preOrderTrav(o);
+      else
+        b.postOrderTrav(o);
+    }
   }
 }
-
-void addToBST(string s, BST &b) {}
 
 int main(int argc, char *argv[]) {
   //   ArgumentManager am(argc, argv);
@@ -107,16 +119,11 @@ int main(int argc, char *argv[]) {
   ofstream output("output1.txt");
 
   string s = "";
-  BST bst;
+  BST tree;
 
   while (input.peek() != EOF) {
     getline(input, s);
-    addToQueue(s, bst);
+    addToQueue(s, tree);
   }
-  DECODEMESSAGES();
-
-  while (!messages.empty()) {
-    addToBST(messages.front(), bst);
-    messages.pop();
-  }
+  DECODEMESSAGES(tree, output);
 }
