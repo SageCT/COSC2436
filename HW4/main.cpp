@@ -24,7 +24,7 @@ bool digitHere(string s) {
 void addToBST(string s, BST &b) { b.insert(s); }
 
 void addToQueue(string s, BST &b) {
-  if (s.find("BST") == string::npos && s.find("order") == string::npos) {
+  if (s.find("BST:") == string::npos && s.find("order") == string::npos) {
     // Finding the priority
     int pri = stoi(s.substr(s.length() - 2, 1));
 
@@ -41,6 +41,7 @@ void addToQueue(string s, BST &b) {
 }
 
 void DECODE(string s) {
+  cout << s << endl;
   s = s.substr(s.find('[') + 1,
                (s.length() - s.find('[') - (s.length() - s.find(']'))) - 1);
   msgs.push(s);
@@ -97,7 +98,6 @@ void DECODEMESSAGES(BST &b, ofstream &o) {
 
     if (s.find("DECODE") != string::npos) {
       DECODE(s);
-      cout << "DECODE: " << s << endl;
     } else if (s.find("REPLACE") != string::npos) {
       cout << "REPLACE: " << s[9] << s[11] << endl;
       REPLACE(s[9], s[11]);
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
   //   ifstream input(am.get("input"));
   //   ofstream output(am.get("output"));
 
-  ifstream input("input2.txt");
+  ifstream input("input3.txt");
   ofstream output("output1.txt");
 
   string s = "";
@@ -143,5 +143,6 @@ int main(int argc, char *argv[]) {
     getline(input, s);
     addToQueue(s, tree);
   }
+
   DECODEMESSAGES(tree, output);
 }
