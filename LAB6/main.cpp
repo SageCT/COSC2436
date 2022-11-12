@@ -13,6 +13,16 @@ int main(int argc, char *argv[]) {
   //   ifstream input(am.get("input"));
   //   ofstream output(am.get("output"));
 
-  ifstream input("input3.txt");
+  ifstream input("input1.txt");
   ofstream output("output1.txt");
+
+  Tree t;
+  while (input.peek() != EOF) {
+    int x;
+    input >> x;
+    cout << x << " ";
+    t.insert(t.getRoot(), x);
+  }
+
+  t.print(t.getRoot(), std::cout);
 }
