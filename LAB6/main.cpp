@@ -6,7 +6,6 @@
 #include "ArgumentManager.h"
 #include "Tree.h"
 
-
 using namespace std;
 
 int main(int argc, char *argv[]) {
