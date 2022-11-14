@@ -22,6 +22,8 @@ class Tree {
   node *newNode(int);
   node *leftRotate(node *);
   node *rightRotate(node *);
+  node *insertHelper(node *, int);
+  void printLevel(node *root, ostream &o, int level, bool);
 
  public:
   Tree() { root = nullptr; };
@@ -87,6 +89,11 @@ node *Tree::rightRotate(node *y) {
 }
 
 node *Tree::insert(node *node, int key) {
+  root = insertHelper(node, key);
+  return root;
+}
+
+node *Tree::insertHelper(node *node, int key) {
   // Find the correct position and insert the node
   if (node == nullptr) return newNode(key);
   if (key < node->key)
@@ -166,13 +173,22 @@ node *Tree::remove(node *root, int key) {
   return root;
 }
 
+void Tree::printLevel(node *root, std::ostream &o, int level, bool firstEntry) {
+  if (root == nullptr) return;
+  if (level == 1)
+    firstEntry ? o << root->key : o << " " << root->key;
+  else if (level > 1) {
+    printLevel(root->left, o, level - 1, false);
+    printLevel(root->right, o, level - 1, false);
+  }
+}
+
 void Tree::print(node *root, std::ostream &o) {
-  if (root != nullptr) {
-    o << root->key << " ";
-    print(root->left, o);
-    print(root->right, o);
-  } else
-    o << endl;
+  int h = height(root);
+  bool lastEntry = false;
+  for (int i = 1; i <= h; i++) {
+    i == 1 ? printLevel(root, o, i, true) : printLevel(root, o, i, false);
+  }
 }
 
 #endif
