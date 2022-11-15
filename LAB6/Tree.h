@@ -23,6 +23,7 @@ class Tree {
   node *leftRotate(node *);
   node *rightRotate(node *);
   node *insertHelper(node *, int);
+  node *balanceTree(node *);
   void printLevel(node *root, ostream &o, int level, bool);
 
  public:
@@ -87,6 +88,8 @@ node *Tree::rightRotate(node *y) {
   x->height = max(height(x->left), height(x->right)) + 1;
   return x;
 }
+
+node *Tree::balanceTree(node *n) {}
 
 node *Tree::insert(node *node, int key) {
   root = insertHelper(node, key);

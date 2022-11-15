@@ -42,10 +42,11 @@ void addToQueue(string s, BST &b) {
 }
 
 void DECODE(string s) {
-  cout << s << endl;
-  s = s.substr(s.find('[') + 1,
-               (s.length() - s.find('[') - (s.length() - s.find(']'))) - 1);
-  msgs.push(s);
+  if (!s.empty()) {
+    s = s.substr(s.find('[') + 1,
+                 (s.length() - s.find('[') - (s.length() - s.find(']'))) - 1);
+    msgs.push(s);
+  }
 }
 
 void REPLACE(char curC, char newC) {

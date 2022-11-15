@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
   x = 0;
   while (input.peek() != EOF) {
     input >> x;
-
     t.insert(t.getRoot(), x);
   }
   t.print(t.getRoot(), output);
