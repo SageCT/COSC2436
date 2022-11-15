@@ -89,7 +89,7 @@ node *Tree::rightRotate(node *y) {
   return x;
 }
 
-node *Tree::balanceTree(node *n) {}
+node *Tree::balanceTree(node *n) { return n; }
 
 node *Tree::insert(node *node, int key) {
   root = insertHelper(node, key);
@@ -154,7 +154,7 @@ node *Tree::remove(node *root, int key) {
 
   if (root == nullptr) return root;
 
-  // Updte the balace factor of each node and balance the tree
+  // Update the balance factor of each node and balance the tree
   root->height = max(height(root->left), height(root->right)) + 1;
   int BF = getBalance(root);
   if (BF > 1) {
@@ -188,7 +188,6 @@ void Tree::printLevel(node *root, std::ostream &o, int level, bool firstEntry) {
 
 void Tree::print(node *root, std::ostream &o) {
   int h = height(root);
-  bool lastEntry = false;
   for (int i = 1; i <= h; i++) {
     i == 1 ? printLevel(root, o, i, true) : printLevel(root, o, i, false);
   }
