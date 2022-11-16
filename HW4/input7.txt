@@ -1,0 +1,8 @@
+DECODE:[abcdefgh](1)
+REMOVE:[a](1)
+REMOVE:[b](1)
+REMOVE:[c](3)
+REMOVE:[d](1)
+REMOVE:[e](1)
+BST:(2)
+Postorder

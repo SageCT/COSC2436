@@ -45,6 +45,7 @@ void DECODE(string s) {
   if (!s.empty()) {
     s = s.substr(s.find('[') + 1,
                  (s.length() - s.find('[') - (s.length() - s.find(']'))) - 1);
+    cout << "Added: " + s << endl;
     msgs.push(s);
   }
 }
@@ -73,8 +74,13 @@ void REMOVE(char c) {
   if (!msgs.empty()) {
     string s = msgs.front();
     msgs.pop();
-    for (int i = 0; i < s.length(); i++)
-      if (s[i] == c) s.erase(i, 1);
+    int len = s.length();
+    for (int i = 0; i < len; i++) {
+      if (s[i] == c) {
+        len--;
+        s.erase(i--, 1);
+      }
+    }
     msgs.push(s);
   }
 }
@@ -144,7 +150,7 @@ int main(int argc, char *argv[]) {
   ifstream input(am.get("input"));
   ofstream output(am.get("output"));
 
-  // ifstream input("input2.txt");
+  // ifstream input("input9.txt");
   // ofstream output("output1.txt");
 
   string s = "";

@@ -1,0 +1,8 @@
+REPLACE:[s,e](1)
+ADD:[N,A](1)
+REMOVE:[V](5)
+SWAP:[N,A](2)
+BST:(2)
+DECODE:[this is the only message](8)
+BST:(9)
+Postorder

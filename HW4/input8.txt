@@ -1,0 +1,5 @@
+DECODE:[ASDSADAS](9)
+REPLACE:[A,C](2)
+DECODE:[ADASDSAD](2)
+SWAP:[A,Q](1)
+Postorder
