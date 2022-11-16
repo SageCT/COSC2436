@@ -74,13 +74,7 @@ void REMOVE(char c) {
   if (!msgs.empty()) {
     string s = msgs.front();
     msgs.pop();
-    int len = s.length();
-    for (int i = 0; i < len; i++) {
-      if (s[i] == c) {
-        len--;
-        s.erase(i--, 1);
-      }
-    }
+    while (s.find(c) != string::npos) s.erase(s.find(c), 1);
     msgs.push(s);
   }
 }
@@ -146,12 +140,12 @@ void printBST(BST &b, vector<string> &v) {
 }
 
 int main(int argc, char *argv[]) {
-  ArgumentManager am(argc, argv);
-  ifstream input(am.get("input"));
-  ofstream output(am.get("output"));
+  // ArgumentManager am(argc, argv);
+  // ifstream input(am.get("input"));
+  // ofstream output(am.get("output"));
 
-  // ifstream input("input9.txt");
-  // ofstream output("output1.txt");
+  ifstream input("input9.txt");
+  ofstream output("output1.txt");
 
   string s = "";
   BST tree;
