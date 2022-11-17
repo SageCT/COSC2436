@@ -2,21 +2,19 @@
 #include <fstream>
 #include <iostream>
 #include <queue>
-#include <string>
 
 #include "ArgumentManager.h"
-
-using namespace std;
-
-// BEGIN TA PROVIDED CODE
 
 bool BFS(int **graph, int start, int end, int n) {
   queue<int> q;
   bool *visited = new bool[n];
-  for (int i = 0; i < n; i++) visited[i] = false;
+
+  for (int i = 0; i < n; i++) {
+    visited[i] = false;
+  }
 
   q.push(start);
-  int v(0);
+  int v = 0;
 
   while (!q.empty()) {
     v = q.front();
@@ -25,11 +23,17 @@ bool BFS(int **graph, int start, int end, int n) {
     if (v == end) {
       delete[] visited;
       return true;
-    } else if (!visited[v])
-      visited[v] = true;
+    }
 
-    for (int i = 0; i < n; i++)
-      if (graph[v][i] != 0 && !visited[i]) q.push(i);
+    else if (!visited[v]) {
+      visited[v] = true;
+    }
+
+    for (int i = 0; i < n; i++) {
+      if (graph[v][i] != 0 && !visited[i]) {
+        q.push(i);
+      }
+    }
   }
 
   delete[] visited;
@@ -38,30 +42,36 @@ bool BFS(int **graph, int start, int end, int n) {
 
 int main(int argc, char *argv[]) {
   ArgumentManager am(argc, argv);
-  ifstream input(am.get("input"));
-  ofstream output(am.get("output"));
 
-  // ifstream input("input3.txt");
-  // ofstream output("output1.txt");
+  string input = am.get("input");
+  string output = am.get("output");
 
-  int n, start, end(0);
-  input >> n;
+  ofstream ofs(output);
+  ifstream ifs(input);
 
+  int n, start, end = 0;
+  ifs >> n;
   int **graph = new int *[n];
-  for (int i = 0; i < n; i++) graph[i] = new int[n];
+
+  for (int i = 0; i < n; i++) {
+    graph[i] = new int[n];
+  }
 
   for (int i = 0; i < n; i++)
     for (int j = 0; j < n; j++) graph[i][j] = 0;
 
-  input >> start >> end;
+  ifs >> start;
+  ifs >> end;
 
   string inStr;
-  int i, j(0);
 
-  while (getline(input, inStr)) {
+  int i, j = 0;
+
+  while (getline(ifs, inStr)) {
     inStr.erase(remove(inStr.begin(), inStr.end(), '\n'), inStr.end());
     inStr.erase(remove(inStr.begin(), inStr.end(), '\r'), inStr.end());
-    if (inStr == " " || inStr.empty()) continue;
+
+    if (inStr == " " || inStr.length() == 0) continue;
 
     i = stoi(inStr.substr(0, inStr.find(' ')));
     j = stoi(inStr.substr(inStr.find(' ') + 1,
@@ -70,8 +80,12 @@ int main(int argc, char *argv[]) {
     graph[j][i] = 1;
   }
 
-  BFS(graph, start, end, n) ? output << "true" : output << "false";
+  if (BFS(graph, start, end, n)) {
+    ofs << "true" << endl;
+  }
+
+  else
+    ofs << "false" << endl;
+
   return 0;
 }
-
-// END TA PROVIDED CODE

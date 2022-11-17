@@ -1,6 +1,6 @@
 #Compile the code
 # if the file ${cmd} exits then remove it
-cmd=lab7
+cmd=lab6
 if [ -f ${cmd} ]; then
     rm ${cmd}
 fi
