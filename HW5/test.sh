@@ -20,7 +20,7 @@ for casenum in `seq 1 1 3`; do
 done
 
 for casenum in `seq 1 1 3`; do
-	./${cmd} "input=input${casenum}.txt;output=output${casenum}.txt" 1>${casenum}.stdcout 2>${casenum}.stderr
+	./${cmd} "input=input${casenum}.txt;command=command${casenum}.txt;output=output${casenum}.txt" 1>${casenum}.stdcout 2>${casenum}.stderr
 	diff -iEBwu ans${casenum}.txt output${casenum}.txt > ${casenum}.diff
 	if [ $? -ne 0 ]; then
     		echo -e "Test case ${casenum}    \033[1;91mFAILED.\033[0m"
