@@ -1,0 +1,29 @@
+October Extras
+
+extra_10_1_1: Stack as Array
+extra_10_1_2: Stack as Array (Template)
+extra_10_1_3: Stack as Linked List
+extra_10_1_4: Stack as Linked List (Template)
+extra_10_1_5: Infix to Postfix
+
+extra_10_2_1: Queue as Array
+extra_10_2_2: Queue as Array (Template)
+extra_10_2_3: Queue as Linked List 
+extra_10_2_4: Queue as Linked List (Template)
+extra_10_2_5: Bucket Sort Implementation
+
+extra_10_3_1: RoundRobin Stuff
+extra_10_3_2-5: Not Assigned, Can Do Exam2 Sorts If You Want
+
+------------------------------------------------------------------------------
+
+September Extras 
+
+extra_9_1_1: List of Students Linked List Practice (Add at Beg, Add at End, Print)
+extra_9_1_2: Linked List Example Again, but with Remove From Beg Function
+
+extra_9_3_1: Implement Linear Search and Binary Search
+
+extra_9_4_1: Implement BubbleSort, Selection Sort and Insertion Sort (though maybe you can do an extra for each individually)
+extra_9_4_2: Test how long it takes for each sorting algorithm to execute
+extra_9_4_3: Function that finds largest even number in linked list
