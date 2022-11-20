@@ -55,6 +55,7 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "xstddef": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "set": "cpp"
     }
 }
