@@ -34,6 +34,8 @@ struct node {
     for (int i = 0; i < degree; i++) keys[i] = -1;
     for (int i = 0; i < degree + 1; i++) childptr[i] = nullptr;
   }
+
+  friend class btree;
 };
 
 class btree {
@@ -148,12 +150,30 @@ class btree {
     // parent node
     firstLeft = leftNode->keys[0], firstRight = rightNode->keys[0];
 
-    // Find the correct position to add the new array
-
+    // Find the correct position in the parent's key array to add the middle key
     for (int i = degree; i >= 0; i--) {
       if (parent->keys[i] > midKey) {
         parent->keys[i + 1] = parent->keys[i];
         parent->keys[i] = midKey;
+        break;
+      }
+    }
+
+    // Find the correct position to add the leftNode and rightNode to the
+    // parent's childptr array
+    for (int i = degree + 1; i >= 0; i--) {
+      if (parent->keys[i] > firstLeft) {
+        parent->childptr[i + 1] = parent->childptr[i];
+        parent->childptr[i] = leftNode;
+        break;
+      }
+    }
+    // For the rightNode
+    for (int i = degree + 1; i >= 0; i--) {
+      if (parent->keys[i] > firstRight) {
+        parent->childptr[i + 1] = parent->childptr[i];
+        parent->childptr[i] = rightNode;
+        break;
       }
     }
 
@@ -170,9 +190,6 @@ class btree {
 
     // Add the middle key to the parent node
   }
-
-  // Add the middle key to the parent node
-  // }
 
   void printLevel(int level, ostream &out) { printLevel(root, level, out); }
 };

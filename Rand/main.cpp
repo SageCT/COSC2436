@@ -1,278 +1,146 @@
-#include <vector>
-#include <fstream>
-#include <iostream>
-#include "ArgumentManager.h"
-#include "Stack.h"
-#include "Queue.h"
+// Inserting a key on a B-tree in C++
 
+#include <iostream>
 using namespace std;
 
-bool isSolved(vector<vector<char>> matrix, size_t row, size_t col)
-{
-    for (size_t i = 0; i < row; i++)
-        for (size_t j = 0; j < col; j++)
-            if (matrix[i][j] == 'B')
-                return false;
+class Node {
+  int *keys;
+  Node **C;
+  int t;
+  int n;
+  bool leaf;
 
-    return true;
+ public:
+  Node(int _t, bool _leaf);
+
+  void insertNonFull(int k);
+  void splitChild(int i, Node *y);
+  void traverse();
+
+  friend class BTree;
+};
+
+class BTree {
+  Node *root;
+  int t;
+
+ public:
+  BTree(int _t) {
+    root = NULL;
+    t = _t;
+  }
+
+  void traverse() {
+    if (root != NULL) root->traverse();
+  }
+
+  void insert(int k);
+};
+
+Node::Node(int t1, bool leaf1) {
+  t = t1;
+  leaf = leaf1;
+
+  keys = new int[2 * t - 1];
+  C = new Node *[2 * t];
+
+  n = 0;
 }
 
-void moveUp(vector<vector<char>> &matrix, size_t row, size_t col)
-{
-    Stack s;
-    int counter = 0;
-    char temp;
+// Traverse the nodes
+void Node::traverse() {
+  int i;
+  for (i = 0; i < n; i++) {
+    if (leaf == false) C[i]->traverse();
+    cout << " " << keys[i];
+  }
 
-    for (int j = 0; j < col; j++)
-    {
-        for (int i = 0; i < row; i++)
-        {
-            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
-            {
-                if (!s.isEmpty() && s.peek() == 'B')
-                {
-                    temp = s.pop();
-                    s.push('X');
-                }
-                else
-                    s.push(matrix[i][j]);
-            }
-            else if (matrix[i][j] != 'X')
-            {
-                while (s.getSize() < counter)
-                    s.push('O');
-                s.push('X');
-            }
-            counter++;
-        }
-
-        while (s.getSize() < counter)
-            s.push('O');
-
-        for (int i = row - 1; i >= 0; i--)
-            matrix[i][j] = s.pop();
-
-        counter = 0;
-    }
+  if (leaf == false) C[i]->traverse();
 }
 
-void moveRight(vector<vector<char>> &matrix, size_t row, size_t col) // Need to implement
-{
-    Stack s;
-    int counter = 0;
-    char temp;
+// Insert the node
+void BTree::insert(int k) {
+  if (root == NULL) {
+    root = new Node(t, true);
+    root->keys[0] = k;
+    root->n = 1;
+  } else {
+    if (root->n == 2 * t - 1) {
+      Node *s = new Node(t, false);
 
-    for (int j = 0; j < col; j++)
-    {
-        for (int i = 0; i < row; i++)
-        {
-            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
-            {
-                if (!s.isEmpty() && s.peek() == 'B')
-                {
-                    temp = s.pop();
-                    s.push('X');
-                }
-                else
-                    s.push(matrix[i][j]);
-            }
-            else if (matrix[i][j] != 'X')
-            {
-                while (s.getSize() < counter)
-                    s.push('O');
-                s.push('X');
-            }
-            counter++;
-        }
+      s->C[0] = root;
 
-        while (s.getSize() < counter)
-            s.push('O');
+      s->splitChild(0, root);
 
-        for (int i = row - 1; i >= 0; i--)
-            matrix[i][j] = s.pop();
+      int i = 0;
+      if (s->keys[0] < k) i++;
+      s->C[i]->insertNonFull(k);
 
-        counter = 0;
-    }
+      root = s;
+    } else
+      root->insertNonFull(k);
+  }
 }
 
-void moveDown(vector<vector<char>> &matrix, size_t row, size_t col) // Need to implement
-{
-    Stack s;
-    int counter = 0;
-    char temp;
+// Insert non full condition
+void Node::insertNonFull(int k) {
+  int i = n - 1;
 
-    for (int j = 0; j < col; j++)
-    {
-        for (int i = 0; i < row; i++)
-        {
-            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
-            {
-                if (!s.isEmpty() && s.peek() == 'B')
-                {
-                    temp = s.pop();
-                    s.push('X');
-                }
-                else
-                    s.push(matrix[i][j]);
-            }
-            else if (matrix[i][j] != 'X')
-            {
-                while (s.getSize() < counter)
-                    s.push('O');
-                s.push('X');
-            }
-            counter++;
-        }
-
-        while (s.getSize() < counter)
-            s.push('O');
-
-        for (int i = row - 1; i >= 0; i--)
-            matrix[i][j] = s.pop();
-
-        counter = 0;
+  if (leaf == true) {
+    while (i >= 0 && keys[i] > k) {
+      keys[i + 1] = keys[i];
+      i--;
     }
+
+    keys[i + 1] = k;
+    n = n + 1;
+  } else {
+    while (i >= 0 && keys[i] > k) i--;
+
+    if (C[i + 1]->n == 2 * t - 1) {
+      splitChild(i + 1, C[i + 1]);
+
+      if (keys[i + 1] < k) i++;
+    }
+    C[i + 1]->insertNonFull(k);
+  }
 }
 
-void moveLeft(vector<vector<char>> &matrix, size_t row, size_t col) // Need to implement
-{
-    Stack s;
-    int counter = 0;
-    char temp;
+// split the child
+void Node::splitChild(int i, Node *y) {
+  Node *z = new Node(y->t, y->leaf);
+  z->n = t - 1;
 
-    for (int j = 0; j < col; j++)
-    {
-        for (int i = 0; i < row; i++)
-        {
-            if (matrix[i][j] != 'O' && matrix[i][j] == 'X')
-            {
-                if (!s.isEmpty() && s.peek() == 'B')
-                {
-                    temp = s.pop();
-                    s.push('X');
-                }
-                else
-                    s.push(matrix[i][j]);
-            }
-            else if (matrix[i][j] != 'X')
-            {
-                while (s.getSize() < counter)
-                    s.push('O');
-                s.push('X');
-            }
-            counter++;
-        }
+  for (int j = 0; j < t - 1; j++) z->keys[j] = y->keys[j + t];
 
-        while (s.getSize() < counter)
-            s.push('O');
+  if (y->leaf == false) {
+    for (int j = 0; j < t; j++) z->C[j] = y->C[j + t];
+  }
 
-        for (int i = row - 1; i >= 0; i--)
-            matrix[i][j] = s.pop();
+  y->n = t - 1;
+  for (int j = n; j >= i + 1; j--) C[j + 1] = C[j];
 
-        counter = 0;
-    }
+  C[i + 1] = z;
+
+  for (int j = n - 1; j >= i; j--) keys[j + 1] = keys[j];
+
+  keys[i] = y->keys[t - 1];
+  n = n + 1;
 }
 
-void addPath(Queue &q, Pair p, int move, size_t row, size_t col)
-{
-    Pair temp;
-    temp.matrix = p.matrix;
-    temp.moves = p.moves;
+int main() {
+  BTree t(3);
+  t.insert(8);
+  t.insert(9);
+  t.insert(10);
+  t.insert(11);
+  t.insert(15);
+  t.insert(16);
+  t.insert(17);
+  t.insert(18);
+  t.insert(20);
+  t.insert(23);
 
-    switch (move)
-    {
-    case 1:
-        moveUp(temp.matrix, row, col);
-        if (temp.matrix != p.matrix)
-        {
-            temp.moves += "1";
-            q.enqueue(temp);
-        }
-        break;
-
-    case 2:
-        moveRight(temp.matrix, row, col);
-        if (temp.matrix != p.matrix)
-        {
-            temp.moves += "2";
-            q.enqueue(temp);
-        }
-        break;
-
-    case 3:
-        moveDown(temp.matrix, row, col);
-        if (temp.matrix != p.matrix)
-        {
-            temp.moves += "3";
-            q.enqueue(temp);
-        }
-        break;
-
-    case 4:
-        moveLeft(temp.matrix, row, col);
-        if (temp.matrix != p.matrix)
-        {
-            temp.moves += "4";
-            q.enqueue(temp);
-        }
-        break;
-    }
-}
-
-int main(int argc, char *argv[])
-{
-    ArgumentManager am(argc, argv);
-    ifstream input(am.get("input"));
-    ofstream output(am.get("output"));
-
-    // ifstream input("input1.txt");
-    // ofstream output("output1.txt");
-
-    size_t row;
-    size_t col;
-    input >> row; // input row
-    input >> col; // input column
-
-    vector<vector<char>> matrix; // input matrix
-
-    // reading the matrix from the input
-    for (int i = 0; i < row; i++)
-    {
-        vector<char> temp;
-        for (int j = 0; j < col; j++)
-        {
-            char c;
-            input >> c;
-            temp.push_back(c);
-        }
-        matrix.push_back(temp);
-    }
-
-    Pair temp;
-    temp.matrix = matrix;
-    temp.moves = "";
-
-    Queue q;
-    q.enqueue(temp);
-
-    while (!q.isEmpty())
-    {
-        temp = q.dequeue();
-        if (isSolved(temp.matrix, row, col))
-        {
-            if (temp.moves == "")
-                cout << 0;
-            else
-                cout << temp.moves;
-        }
-        else
-        {
-            addPath(q, temp, 1, row, col);
-            addPath(q, temp, 2, row, col);
-            addPath(q, temp, 3, row, col);
-            addPath(q, temp, 4, row, col);
-        }
-    }
-
-    return 0;
+  cout << "The B-tree is: ";
+  t.traverse();
 }

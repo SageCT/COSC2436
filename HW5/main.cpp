@@ -43,15 +43,14 @@ int main(int argc, char *argv[]) {
       level = stoi(s.substr(s.find(" ") + 1));
   }
 
-  cout << "Degree: " << degree << endl;
 
-  // btree b(degree);
-  // for (auto k : keys) b.insert(k);
+  btree b(degree);
+  for (auto k : keys) b.insert(k);
 
   cout << "Height: " << level << endl;
-  // b.printLevel(level, cout);
+  b.printLevel(level, cout);
 
-  for (auto k : keys) cout << k << " ";
+  
 
   return 0;
 }
