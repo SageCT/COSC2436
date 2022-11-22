@@ -111,18 +111,24 @@ void Node::splitChild(int i, Node *y) {
   Node *z = new Node(y->t, y->leaf);
   z->n = t - 1;
 
-  for (int j = 0; j < t - 1; j++) z->keys[j] = y->keys[j + t];
+  for (int j = 0; j < t - 1; j++) {
+    z->keys[j] = y->keys[j + t];
+  }
 
   if (y->leaf == false) {
     for (int j = 0; j < t; j++) z->C[j] = y->C[j + t];
   }
 
   y->n = t - 1;
-  for (int j = n; j >= i + 1; j--) C[j + 1] = C[j];
+  for (int j = n; j >= i + 1; j--) {
+    C[j + 1] = C[j];
+  }
 
   C[i + 1] = z;
 
-  for (int j = n - 1; j >= i; j--) keys[j + 1] = keys[j];
+  for (int j = n - 1; j >= i; j--) {
+    keys[j + 1] = keys[j];
+  }
 
   keys[i] = y->keys[t - 1];
   n = n + 1;
@@ -130,12 +136,8 @@ void Node::splitChild(int i, Node *y) {
 
 int main() {
   BTree t(3);
-  t.insert(1);
-  t.insert(2);
-  t.insert(3);
-  t.insert(4);
-  t.insert(5);
-  t.insert(6);
+  int i = 1;
+  while (i <= 10) t.insert(i++);
 
   cout << "The B-tree is: ";
   t.traverse();

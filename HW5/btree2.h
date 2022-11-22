@@ -17,6 +17,7 @@ class Node {
   void insertNonFull(int);
   void splitChild(int, Node *);
   void traverse(int level, ostream &o);
+  void printLevel(int level, ostream &o);
 
   friend class BTree;
 };
@@ -44,8 +45,8 @@ class BTree {
 Node::Node(int d, bool l) {
   // Set the degree, leaf boolean, and initalize the keys and child ptrs
   degree = d, leaf = l;
-  keys = new int[degree];
-  childPtr = new Node *[degree + 1];
+  keys = new int[2 * degree - 1];
+  childPtr = new Node *[2 * degree];
 
   size = 0;
 }
@@ -60,6 +61,15 @@ void Node::traverse(int level, ostream &o) {
   if (!leaf) childPtr[i]->traverse(level, o);
 }
 
+void Node::printLevel(int level, ostream &o) {
+  int i;
+  for (i = 0; i < size; i++) {
+    if (!leaf) childPtr[i]->printLevel(level - 1, o);
+    o << " " << keys[i];
+  }
+  if (!leaf) childPtr[i]->printLevel(level, o);
+}
+
 /* End Node functions */
 
 /* Define BTree functions */
@@ -70,7 +80,7 @@ void BTree::insert(int key) {
     root->keys[0] = key;
     root->size = 1;
   } else {
-    if (root->size == degree) {
+    if (root->size == 2 * degree - 1) {
       Node *s = new Node(degree, false);
       s->childPtr[0] = root;
       s->splitChild(0, root);
@@ -97,7 +107,7 @@ void Node::insertNonFull(int key) {
   } else {
     while (i >= 0 && keys[i] > key) i--;
 
-    if (childPtr[i + 1]->size == degree) {
+    if (childPtr[i + 1]->size == 2 * degree - 1) {
       splitChild(i + 1, childPtr[i + 1]);
 
       if (keys[i + 1] < key) i++;
