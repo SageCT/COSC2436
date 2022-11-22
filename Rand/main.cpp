@@ -130,16 +130,12 @@ void Node::splitChild(int i, Node *y) {
 
 int main() {
   BTree t(3);
-  t.insert(8);
-  t.insert(9);
-  t.insert(10);
-  t.insert(11);
-  t.insert(15);
-  t.insert(16);
-  t.insert(17);
-  t.insert(18);
-  t.insert(20);
-  t.insert(23);
+  t.insert(1);
+  t.insert(2);
+  t.insert(3);
+  t.insert(4);
+  t.insert(5);
+  t.insert(6);
 
   cout << "The B-tree is: ";
   t.traverse();

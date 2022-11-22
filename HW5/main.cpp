@@ -1,10 +1,11 @@
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
 #include "ArgumentManager.h"
-#include "btree.h"
+#include "btree2.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
     keys.push_back(i);
   }
 
-  string s;
+  string s = "";
   while (cmd.peek() != EOF) {
     getline(cmd, s);
     s.erase(remove(s.begin(), s.end(), '\n'), s.end());
@@ -43,14 +44,14 @@ int main(int argc, char *argv[]) {
       level = stoi(s.substr(s.find(" ") + 1));
   }
 
+  // btree b(degree);
 
-  btree b(degree);
+  BTree b(degree);
+
   for (auto k : keys) b.insert(k);
 
   cout << "Height: " << level << endl;
   b.printLevel(level, cout);
-
-  
 
   return 0;
 }
