@@ -22,11 +22,15 @@ int main(int argc, char *argv[]) {
   vector<int> keys;
   int degree, level;
 
+  // Taking inputs from the input file
   while (input.peek() != EOF) {
     int i;
     input >> i;
     keys.push_back(i);
   }
+
+  // Deleting duplicate values before inputting to BTree
+  keys.erase(unique(keys.begin(), keys.end()), keys.end());
 
   string s = "";
   while (cmd.peek() != EOF) {
@@ -45,7 +49,6 @@ int main(int argc, char *argv[]) {
   }
 
   // btree b(degree);
-
   BTree b(degree);
 
   for (auto k : keys) b.insert(k);

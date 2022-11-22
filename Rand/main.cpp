@@ -56,6 +56,11 @@ void Node::traverse() {
   }
 
   if (leaf == false) C[i]->traverse();
+
+  // cout << keys[0];
+  // cout << C[0]->keys[0];
+  // cout << C[1]->keys[0];
+  // cout << C[1]->keys[0];
 }
 
 // Insert the node
@@ -135,7 +140,7 @@ void Node::splitChild(int i, Node *y) {
 }
 
 int main() {
-  BTree t(3);
+  BTree t(2);
   int i = 1;
   while (i <= 10) t.insert(i++);
 

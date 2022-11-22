@@ -33,7 +33,7 @@ class BTree {
   }
 
   void printLevel(int level, ostream &o) {
-    if (root != nullptr) root->traverse(level, o);
+    if (root != nullptr) root->printLevel(level, o);
   }
 
   void insert(int);
@@ -45,8 +45,8 @@ class BTree {
 Node::Node(int d, bool l) {
   // Set the degree, leaf boolean, and initalize the keys and child ptrs
   degree = d, leaf = l;
-  keys = new int[2 * degree - 1];
-  childPtr = new Node *[2 * degree];
+  keys = new int[degree];
+  childPtr = new Node *[degree + 1];
 
   size = 0;
 }
@@ -62,12 +62,22 @@ void Node::traverse(int level, ostream &o) {
 }
 
 void Node::printLevel(int level, ostream &o) {
-  int i;
-  for (i = 0; i < size; i++) {
-    if (!leaf) childPtr[i]->printLevel(level - 1, o);
-    o << " " << keys[i];
-  }
-  if (!leaf) childPtr[i]->printLevel(level, o);
+  // int i;
+  // if (level == 1) {
+  //   for (int i = 0; i < size; i++) {
+  //     o << keys[i] << " ";
+  //   }
+  // } else if (level > 1) {
+  //   for (int i = 0; i < size; i++)
+  //     if (childPtr[i] != nullptr) childPtr[i]->printLevel(level - 1, o);
+  // }
+
+  cout << keys[0];
+
+  cout << childPtr[0]->keys[0];
+  cout << childPtr[0]->keys[1];
+
+  // if (!leaf) childPtr[i]->printLevel(level, o);
 }
 
 /* End Node functions */
@@ -80,7 +90,7 @@ void BTree::insert(int key) {
     root->keys[0] = key;
     root->size = 1;
   } else {
-    if (root->size == 2 * degree - 1) {
+    if (root->size == degree) {
       Node *s = new Node(degree, false);
       s->childPtr[0] = root;
       s->splitChild(0, root);
@@ -107,7 +117,7 @@ void Node::insertNonFull(int key) {
   } else {
     while (i >= 0 && keys[i] > key) i--;
 
-    if (childPtr[i + 1]->size == 2 * degree - 1) {
+    if (childPtr[i + 1]->size == degree + 1) {
       splitChild(i + 1, childPtr[i + 1]);
 
       if (keys[i + 1] < key) i++;
@@ -119,16 +129,21 @@ void Node::insertNonFull(int key) {
 
 // Split Child Node
 void Node::splitChild(int i, Node *leftNode) {
+  // Create right node for split, will be leaf if passed node (leftNode) is leaf
   Node *rightNode = new Node(leftNode->degree, leftNode->leaf);
   rightNode->size = degree - 1;
 
+  // Copy the keys from leftNode to rightNode, until degree - 1 because that's
+  // max number of nodes
   for (int x = 0; x < degree - 1; x++)
     rightNode->keys[x] = leftNode->keys[x + degree];
 
+  // If leftNode is not a leaf, copy the child pointers
   if (!leftNode->leaf)
     for (int x = 0; x < degree; x++)
       rightNode->childPtr[x] = leftNode->childPtr[x + degree];
 
+  // Reduce the size of leftNode
   leftNode->size = degree - 1;
   for (int x = size; x >= i + 1; x--) childPtr[x + 1] = childPtr[x];
 

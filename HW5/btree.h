@@ -6,27 +6,25 @@
 #include <string>
 #include <vector>
 
+using namespace std;
 struct node {
-  int *keys;
-  node **childptr;
+  vector<int> keys;
+  vector<node *> childptr;
   node *parentptr;
   bool leaf;
   int size;
 
   node(int degree) {
-    keys = new int[degree];
-    childptr = new node *[degree + 1];
+    keys = vector<int>(degree);
+    childptr = vector<node *>(degree + 1);
     parentptr = nullptr;
     leaf = true;
     size = 0;
 
-    for (int i = 0; i < degree; i++) keys[i] = -1;
     for (int i = 0; i < degree + 1; i++) childptr[i] = nullptr;
   }
 
   node(node *parent, int degree) {
-    keys = new int[degree];
-    childptr = new node *[degree + 1];
     parentptr = parent;
     leaf = true;
     size = 0;
@@ -43,7 +41,7 @@ class btree {
   node *root;
   int degree;
 
-  node *printLevel(node *n, int level, ostream &out) {
+  node *printLevel(node *n, int level, std::ostream &out) {
     if (n == nullptr) return nullptr;
     if (n->leaf && level == 1) {
       for (int i = 0; i < n->size; i++) {
@@ -177,21 +175,12 @@ class btree {
       }
     }
 
-    // if(leftNode->leaf){
-    //   node *newParent = new node(parent, degree);
-    //   newParent->keys[0] = midKey;
-    //   newParent->childptr[0] = leftNode;
-    //   newParent->childptr[1] = rightNode;
-    //   newParent->size++;
-    //   newParent->leaf = false;
-
-    //   leftNode->parentptr = newParent;
-    //   rightNode->parentptr = newParent;
-
     // Add the middle key to the parent node
   }
 
-  void printLevel(int level, ostream &out) { printLevel(root, level, out); }
+  void printLevel(int level, std::ostream &out) {
+    printLevel(root, level, out);
+  }
 };
 
 #endif
