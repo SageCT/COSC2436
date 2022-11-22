@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
   // ifstream cmd(am.get("command"));
   // ofstream out(am.get("output"));
 
-  ifstream input("input1.txt");
+  ifstream input("test.txt");
   ifstream cmd("command1.txt");
   ofstream out("output1.txt");
 
@@ -43,11 +43,15 @@ int main(int argc, char *argv[]) {
       level = stoi(s.substr(s.find(" ") + 1));
   }
 
-  btree b(degree);
-  for (auto k : keys) b.insert(k);
+  cout << "Degree: " << degree << endl;
+
+  // btree b(degree);
+  // for (auto k : keys) b.insert(k);
 
   cout << "Height: " << level << endl;
-  b.printLevel(level, cout);
+  // b.printLevel(level, cout);
+
+  for (auto k : keys) cout << k << " ";
 
   return 0;
 }
