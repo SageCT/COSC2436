@@ -63,7 +63,7 @@ class btree {
     if (n == nullptr) return;
     if (level == 1) {
       int i = 0;
-      while (n->keys[i] != -1) cout << n->keys[i] << " ", i++;
+      while (n->keys[i] != -1) out << n->keys[i] << " ", i++;
     }
 
     else if (level > 1) {
@@ -78,6 +78,16 @@ class btree {
   btree(int _degree) {
     root = nullptr;
     degree = _degree;
+  }
+
+  int getHeight() {
+    int height = 0;
+    node *temp = root;
+    while (temp != nullptr) {
+      height++;
+      temp = temp->childptr[0];
+    }
+    return height;
   }
 
   // Inserts a node into the B-tree, if root is NOT nullptr, adds at leaf
@@ -148,13 +158,13 @@ class btree {
     // Passed as left, so create right node
     node *rightNode = new node(degree);
     int mid = (degree - 1) / 2;
-    rightNode->size = degree - mid - 1;
 
     int midKey = leftNode->keys[mid];
 
     // copy half of left node to right node
-    for (int x = 0; x <= rightNode->size - 1; x++) {
+    for (int x = 0; x <= leftNode->size - mid; x++) {
       rightNode->keys[x] = leftNode->keys[x + mid + 1];
+      rightNode->size++;
 
       leftNode->keys[x + mid + 1] = -1;
       leftNode->size--;

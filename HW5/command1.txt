@@ -1,2 +1,2 @@
-Degree=3
+Degree=4
 Level 2

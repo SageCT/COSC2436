@@ -15,12 +15,13 @@ int main(int argc, char *argv[]) {
   // ifstream cmd(am.get("command"));
   // ofstream out(am.get("output"));
 
-  ifstream input("input1.txt");
-  ifstream cmd("command1.txt");
+  ifstream input("test.txt");
+  ifstream cmd("command2.txt");
   ofstream out("output1.txt");
 
-  vector<int> keys;
-  int degree, level;
+  vector<int> keys, levels;
+
+  int degree;
 
   // Taking inputs from the input file
   while (input.peek() != EOF) {
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     // Find level to print out
     else if (s.find("Level ") != string::npos)
-      level = stoi(s.substr(s.find(" ") + 1));
+      levels.push_back(stoi(s.substr(s.find(" ") + 1)));
   }
 
   // btree b(degree);
@@ -53,8 +54,11 @@ int main(int argc, char *argv[]) {
 
   for (auto k : keys) b.insert(k);
 
-  cout << "Height: " << level << endl;
-  b.printLevel(level, cout);
+  cout << "Height=" << b.getHeight() << endl;
+  for (auto l : levels) {
+    b.printLevel(l, cout);
+    cout << endl;
+  }
 
   return 0;
 }
