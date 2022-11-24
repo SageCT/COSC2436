@@ -2,6 +2,7 @@
 #define BTREE_H
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,15 +10,17 @@
 using namespace std;
 
 struct node {
-  int *keys;
-  node **childptr;
+  vector<int> keys;
+  vector<node *> childptr;
   node *parentptr;
   bool leaf;
   int size;
 
   node(int degree) {
-    keys = new int[degree];
-    childptr = new node *[degree + 1];
+    // Keys is of size degree
+    keys.resize(degree);
+    // Childptr is of size degree + 1
+    childptr.resize(degree + 1);
     parentptr = nullptr;
     leaf = true;
     size = 0;
@@ -27,8 +30,6 @@ struct node {
   }
 
   node(node *parent, int degree) {
-    keys = new int[degree];
-    childptr = new node *[degree + 1];
     parentptr = parent;
     leaf = true;
     size = 0;
@@ -45,21 +46,38 @@ class btree {
   node *root;
   int degree;
 
-  node *printLevel(node *n, int level, ostream &out) {
-    if (n == nullptr) return nullptr;
-    if (n->leaf && level == 1) {
-      for (int i = 0; i < n->size; i++) {
-        out << n->keys[i] << " ";
-      }
-    } else if (level > 1) {
-      printLevel(n->childptr[0], level - 1, out);
-      printLevel(n->childptr[n->size], level - 1, out);
+  void printChildptr(node *n, ostream &out) {
+    for (int i = 0; i < degree; i++) {
+      if (n->childptr[i] != nullptr)
+        for (int x = 0; x < n->childptr[i]->keys.size(); x++) {
+          if (n->childptr[i]->keys[x] != -1)
+            out << n->childptr[i]->keys[x] << " ";
+          else {
+            break;
+          }
+        }
     }
   }
 
-  node *trimExtra(node *toTrim, node *toLeave) {
-    if (toTrim == nullptr) return nullptr;
-    for () }
+  void printLevel(node *n, int level, ostream &out) {
+    if (n == nullptr) return;
+    if (!n->childptr.empty()) {
+      node *temp = n->childptr[0];
+      for (int i = 1; i <= level; i++) {
+        if (temp->childptr[0] != nullptr) {
+          temp = temp->childptr[0];
+        }
+      }
+
+      for (int i = 0; i < temp->keys.size(); i++) {
+        if (temp->keys[i] != -1) {
+          out << temp->keys[i] << " ";
+        } else {
+          break;
+        }
+      }
+    }
+  }
 
  public:
   btree(int _degree) {
@@ -70,10 +88,12 @@ class btree {
   // Inserts a node into the B-tree, if root is NOT nullptr, adds at leaf
   void insert(int data) {
     if (root == nullptr) {
+      cout << "Root is nullptr adding : " << data << endl;
       root = new node(degree);
       root->keys[0] = data;
       root->size = 1;
     } else {
+      cout << "Adding, root not empty: " << data << endl;
       addAtLeaf(nullptr, root, data);
     }
   }
@@ -91,6 +111,7 @@ class btree {
         i--;
       }
       // Add data to the node where data is greater than array at index
+      cout << "Adding " << data << " to index " << i << endl;
       n->keys[i] = data;
       n->parentptr = parent;
       n->size++;
@@ -115,7 +136,9 @@ class btree {
         node *temp = new node(degree);
         temp->leaf = false;
         temp->childptr[0] = n;
+        temp->size = 0;
         splitChild(temp, n);
+        cout << "Root is now: " << temp->keys[0] << endl;
         root = temp;
       } else {
         splitChild(parent, n);
@@ -135,11 +158,17 @@ class btree {
     int midKey = leftNode->keys[mid];
 
     // copy half of left node to right node
-    for (int x = 0; x < rightNode->size - 1; x++) {
+    for (int x = 0; x <= rightNode->size - 1; x++) {
       rightNode->keys[x] = leftNode->keys[x + mid + 1];
+
       leftNode->keys[x + mid + 1] = -1;
       leftNode->size--;
     }
+
+    // Remove midKey from leftNode
+    leftNode->keys[mid] = -1;
+    leftNode->size--;
+
     // If passed node (leftNode) is not a leaf, copy the pointers to rightNode
     if (!leftNode->leaf) {
       // For each child in passed node, check the children's key values to see
@@ -161,39 +190,58 @@ class btree {
           }
         }
       }
-    }
-    // copy half the pointer of the left node to the right node
-    /* --------------------- Done Above --------------------- */
 
-    // find the correct position to add the new array
+      // copy half the pointer of the left node to the right node
+      /* --------------------- Done Above --------------------- */
 
-    // add the middle keys to the parent
-    for (int i = parent->size - 1; i >= 0; i--) {
-      if (parent->keys[i] < midKey && parent->keys[i + 1] < degree - 1) {
-        parent->keys[i + 1] = midKey;
+      // find the correct position to add the new array within the parent
+      // childptr array, need to add middlekey first because we are using add at
+      // leaf.
+
+      // add the middle key to the parent
+      for (int i = parent->size - 1; i >= 0; i--) {
+        if (parent->keys[i] < midKey && parent->size < degree - 1) {
+          parent->keys[i + 1] = midKey;
+          break;
+        }
+      }
+
+      // Add the keys from the left and right nodes to the parent through
+      // addAtLeaf
+      for (int i = 0; i < degree; i++) {
+        if (leftNode->childptr[i] != nullptr) {
+          for (int x = 0; x < degree; x++)
+            if (leftNode->childptr[i]->keys[x] > -1) {
+              addAtLeaf(parent->parentptr, parent,
+                        leftNode->childptr[i]->keys[x]);
+            }
+        }
       }
     }
 
-    // // vector<int> childkeys;
-    // // int highest = -1;
-    // // for (int y = 0; y < degree; y++) {
-    // //   int highestVal = -1;
-    // //   if (leftNode->childptr[x]->keys[y] != -1) {
-    // //     childkeys.push_back(leftNode->childptr[x]->keys[y]);
-    // //   }
-    // // }
-    // // After adding all the keys of a child to the vector, sort to find
-    // // the largest value
-    // sort(childkeys.begin(), childkeys.end(), greater<int>());
-    // highest = childkeys[0];
+    else if (leftNode->leaf) {
+      // If passed node (leftNode) is a leaf, send the middle key to the parent
+      int i = parent->size;
+      // Find the first spot where data is less than keys[i - 1]
+      while (i != 0 && midKey < parent->keys[i - 1]) {
+        // Pointer of arrays can change size dynamically
+        parent->keys[i] = parent->keys[i - 1];
+        i--;
+      }
 
-    // // If the highest value is greater than the midKey (which will be
-    // // passed to the parent), then it belongs in the right node
-    // if (highest > midKey) {
-    //   rightNode->childptr[i] = leftNode->childptr[x];
-    // } else if (highest < midKey && highest != -1) {
-    //   leftptr.push_back(leftNode->childptr[x]);
-    // }
+      parent->keys[i] = midKey;
+      parent->size++;
+    }
+
+    for (int i = 0; i < degree; i++) {
+      if (rightNode->childptr[i] != nullptr) {
+        for (int x = 0; x < degree; x++)
+          if (rightNode->childptr[i]->keys[x] > -1) {
+            addAtLeaf(parent->parentptr, parent,
+                      rightNode->childptr[i]->keys[x]);
+          }
+      }
+    }
   }
 
   void printLevel(int level, ostream &out) { printLevel(root, level, out); }

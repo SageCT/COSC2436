@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "ArgumentManager.h"
-#include "btree2.h"
+#include "btree.h"
 
 using namespace std;
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
   }
 
   // btree b(degree);
-  BTree b(degree);
+  btree b(degree);
 
   for (auto k : keys) b.insert(k);
 
