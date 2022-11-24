@@ -61,20 +61,15 @@ class btree {
 
   void printLevel(node *n, int level, ostream &out) {
     if (n == nullptr) return;
-    if (!n->childptr.empty()) {
-      node *temp = n->childptr[0];
-      for (int i = 1; i <= level; i++) {
-        if (temp->childptr[0] != nullptr) {
-          temp = temp->childptr[0];
-        }
-      }
+    if (level == 1) {
+      int i = 0;
+      while (n->keys[i] != -1) cout << n->keys[i] << " ", i++;
+    }
 
-      for (int i = 0; i < temp->keys.size(); i++) {
-        if (temp->keys[i] != -1) {
-          out << temp->keys[i] << " ";
-        } else {
-          break;
-        }
+    else if (level > 1) {
+      for (int i = 0; i < degree; i++) {
+        if (n->childptr[i] != nullptr)
+          printLevel(n->childptr[i], level - 1, out);
       }
     }
   }
@@ -122,7 +117,7 @@ class btree {
     // leaf
     else {
       int i = 0;
-      while (i < n->size && data > n->keys[i]) {
+      while (i < n->size - 1 && data > n->keys[i]) {
         i++;
       }
       addAtLeaf(n, n->childptr[i], data);
@@ -231,6 +226,13 @@ class btree {
 
       parent->keys[i] = midKey;
       parent->size++;
+
+      int j = degree;
+      while (parent->childptr[j] == nullptr && j != 0) {
+        j--;
+      }
+
+      parent->childptr[j + 1] = rightNode;
     }
 
     for (int i = 0; i < degree; i++) {

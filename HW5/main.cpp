@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
   // ifstream cmd(am.get("command"));
   // ofstream out(am.get("output"));
 
-  ifstream input("test.txt");
+  ifstream input("input1.txt");
   ifstream cmd("command1.txt");
   ofstream out("output1.txt");
 
