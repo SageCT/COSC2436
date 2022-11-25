@@ -74,21 +74,30 @@ class btree {
     }
   }
 
+  int getHeight(node *n, int level) {
+    if (n == nullptr) return 0;
+
+    if (n->leaf)
+      return level;
+    else {
+      int max = 0;
+      for (int i = 0; i < degree; i++) {
+        if (n->childptr[i] != nullptr) {
+          int height = getHeight(n->childptr[i], level + 1);
+          if (height > max) max = height;
+        }
+      }
+      return max;
+    }
+  }
+
  public:
   btree(int _degree) {
     root = nullptr;
     degree = _degree;
   }
 
-  int getHeight() {
-    int height = 0;
-    node *temp = root;
-    while (temp != nullptr) {
-      height++;
-      temp = temp->childptr[0];
-    }
-    return height;
-  }
+  int getHeight() { return getHeight(root, 0); }
 
   // Inserts a node into the B-tree, if root is NOT nullptr, adds at leaf
   void insert(int data) {
@@ -206,21 +215,22 @@ class btree {
       /* --------------------- Done Above --------------------- */
 
       // find the correct position to add the new array within the parent
-      // childptr array, need to add middlekey first because we are using add at
-      // leaf.
-      if (parent != nullptr) {
-        // add the middle key to the parent
-        for (int i = parent->size - 1; i >= 0; i--) {
-          if (parent->keys[i] < midKey && parent->size < degree - 1) {
-            parent->keys[i + 1] = midKey;
-            break;
-          }
-        }
-      } else {
+      // childptr array, need to add middlekey first because we are using add
+      // at leaf.
+      if (parent == nullptr) {
         // Create a new parent
         parent = new node(degree);
-        // Add midKey to parent
-        parent->keys[0] = midKey;
+        // Add leftNode and rightNode to parent
+        parent->childptr[0] = leftNode;
+        parent->childptr[1] = rightNode;
+      }
+
+      // add the middle key to the parent
+      for (int i = parent->size - 1; i >= 0; i--) {
+        if (parent->keys[i] < midKey && parent->size < degree - 1) {
+          parent->keys[i + 1] = midKey;
+          break;
+        }
       }
 
       // Add the keys from the left and right nodes to the parent through
@@ -237,7 +247,8 @@ class btree {
     }
 
     else if (leftNode->leaf) {
-      // If passed node (leftNode) is a leaf, send the middle key to the parent
+      // If passed node (leftNode) is a leaf, send the middle key to the
+      // parent
       int i = parent->size;
       // Find the first spot where data is less than keys[i - 1]
       while (i != 0 && midKey < parent->keys[i - 1]) {
