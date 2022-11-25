@@ -122,6 +122,27 @@ class btree {
     return -1;
   }
 
+  // Helper function to add the midKey to the parent and add the children to the
+  // parent without affecting the parent's other children. (Does not check for
+  // if the parent is full)
+  void addChildptrToParent(node *parent, node *leftNode, node *rightNode,
+                           int midKey) {
+    // Insert the midKey into the parent at the correct position.
+    int i;
+    for (i = degree - 1; i >= 0; i--)
+      if (parent->keys[i] > midKey && parent->size < degree - 1) continue;
+
+    parent->keys.insert(parent->keys.begin() + i, midKey);
+    parent->size++;
+
+    if (parent->size == degree) splitChild(parent->parentptr, parent);
+
+    // Insert the leftNode at the correct position based on the index that the
+    // midKey was added
+    parent->childptr.insert(parent->childptr.begin() + i, leftNode);
+    parent->childptr.insert(parent->childptr.begin() + i + 1, rightNode);
+  }
+
   // Adds the new node into the tree at first available leaf,
   // if leaf is full uses splitChild to create a new array
   void addAtLeaf(node *parent, node *n, int data) {
@@ -223,59 +244,19 @@ class btree {
         // Add leftNode and rightNode to parent
         parent->childptr[0] = leftNode;
         parent->childptr[1] = rightNode;
+        parent->parentptr = nullptr;
       }
 
-      // add the middle key to the parent
-      for (int i = parent->size - 1; i >= 0; i--) {
-        if (parent->keys[i] < midKey && parent->size < degree - 1) {
-          parent->keys[i + 1] = midKey;
-          break;
-        }
-      }
+      // add the middle key to the parent and add the left and right nodes as
+      // children
+      addChildptrToParent(parent, leftNode, rightNode, midKey);
 
-      // Add the keys from the left and right nodes to the parent through
-      // addAtLeaf
-      for (int i = 0; i < degree; i++) {
-        if (leftNode->childptr[i] != nullptr) {
-          for (int x = 0; x < degree; x++)
-            if (leftNode->childptr[i]->keys[x] > -1) {
-              addAtLeaf(parent->parentptr, parent,
-                        leftNode->childptr[i]->keys[x]);
-            }
-        }
-      }
     }
 
     else if (leftNode->leaf) {
       // If passed node (leftNode) is a leaf, send the middle key to the
       // parent
-      int i = parent->size;
-      // Find the first spot where data is less than keys[i - 1]
-      while (i != 0 && midKey < parent->keys[i - 1]) {
-        // Pointer of arrays can change size dynamically
-        parent->keys[i] = parent->keys[i - 1];
-        i--;
-      }
-
-      parent->keys[i] = midKey;
-      parent->size++;
-
-      int j = degree;
-      while (parent->childptr[j] == nullptr && j != 0) {
-        j--;
-      }
-
-      parent->childptr[j + 1] = rightNode;
-
-      for (int i = 0; i < degree; i++) {
-        if (rightNode->childptr[i] != nullptr) {
-          for (int x = 0; x < degree; x++)
-            if (rightNode->childptr[i]->keys[x] > -1) {
-              addAtLeaf(parent->parentptr, parent,
-                        rightNode->childptr[i]->keys[x]);
-            }
-        }
-      }
+      addChildptrToParent(parent, leftNode, rightNode, midKey);
 
       // If the parent is full, call splitChild on the parent
       if (parent->size == degree) splitChild(parent->parentptr, parent);
