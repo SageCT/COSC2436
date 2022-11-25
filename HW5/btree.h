@@ -103,6 +103,16 @@ class btree {
     }
   }
 
+  // Finds the next available spot to insert a key, if the key can be added to
+  // the node
+  int findInsertion(node *n, int data) {
+    int x = 0;
+    for (int i = 0; i <= n->size; i++) {
+      if (data < n->keys[i] || n->keys[i] == -1) return i;
+    }
+    return -1;
+  }
+
   // Adds the new node into the tree at first available leaf,
   // if leaf is full uses splitChild to create a new array
   void addAtLeaf(node *parent, node *n, int data) {
@@ -125,12 +135,8 @@ class btree {
     // Else find the first index where the data is bigger that keys[i] and
     // call addAtLeaf() again to add it to traverse the tree and add it to a
     // leaf
-    else {
-      int i = 0;
-      while (i < n->size - 1 && data > n->keys[i]) {
-        i++;
-      }
-      addAtLeaf(n, n->childptr[i], data);
+    else if (findInsertion(n, data) != -1) {
+      addAtLeaf(n, n->childptr[findInsertion(n, data)], data);
     }
 
     // Need to determine if node is a leaf within splitChild() if it is, then
@@ -162,7 +168,7 @@ class btree {
     int midKey = leftNode->keys[mid];
 
     // copy half of left node to right node
-    for (int x = 0; x <= leftNode->size - mid; x++) {
+    for (int x = 0; x < leftNode->size - mid; x++) {
       rightNode->keys[x] = leftNode->keys[x + mid + 1];
       rightNode->size++;
 
@@ -237,21 +243,23 @@ class btree {
       parent->keys[i] = midKey;
       parent->size++;
 
-      int j = degree;
-      while (parent->childptr[j] == nullptr && j != 0) {
-        j--;
-      }
+      if (parent->size < 2) {
+        int j = degree;
+        while (parent->childptr[j] == nullptr && j != 0) {
+          j--;
+        }
 
-      parent->childptr[j + 1] = rightNode;
-    }
-
-    for (int i = 0; i < degree; i++) {
-      if (rightNode->childptr[i] != nullptr) {
-        for (int x = 0; x < degree; x++)
-          if (rightNode->childptr[i]->keys[x] > -1) {
-            addAtLeaf(parent->parentptr, parent,
-                      rightNode->childptr[i]->keys[x]);
+        parent->childptr[j + 1] = rightNode;
+      } else {
+        for (int i = 0; i < degree; i++) {
+          if (rightNode->childptr[i] != nullptr) {
+            for (int x = 0; x < degree; x++)
+              if (rightNode->childptr[i]->keys[x] > -1) {
+                addAtLeaf(parent->parentptr, parent,
+                          rightNode->childptr[i]->keys[x]);
+              }
           }
+        }
       }
     }
   }

@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
   // ifstream cmd(am.get("command"));
   // ofstream out(am.get("output"));
 
-  ifstream input("test.txt");
+  ifstream input("input2.txt");
   ifstream cmd("command2.txt");
   ofstream out("output1.txt");
 
@@ -31,7 +31,11 @@ int main(int argc, char *argv[]) {
   }
 
   // Deleting duplicate values before inputting to BTree
+  sort(keys.begin(), keys.end());
   keys.erase(unique(keys.begin(), keys.end()), keys.end());
+
+  for (auto k : keys) cout << k << " ";
+  cout << endl;
 
   string s = "";
   while (cmd.peek() != EOF) {
