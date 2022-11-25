@@ -163,6 +163,7 @@ class btree {
   void splitChild(node *parent, node *leftNode) {
     // Passed as left, so create right node
     node *rightNode = new node(degree);
+    node *newParent = new node(degree);
     int mid = (degree - 1) / 2;
 
     int midKey = leftNode->keys[mid];
@@ -186,18 +187,17 @@ class btree {
       // if it belongs in left or right node
       vector<node *> leftptr;
       int i = 0;
-      for (int x = 0; x < degree; x++) {
+      for (int x = degree; x >= 0; x--) {
         int biggestChildKey = -1;
         if (leftNode->childptr[x] != nullptr) {
-          for (int y = leftNode->childptr[x]->size - 1; y >= 0; y--) {
-            biggestChildKey = leftNode->childptr[x]->keys[y];
-            // If biggestkey > midkey, then it belongs in the right node also
-            // delete that pointer from the left node
-            if (biggestChildKey > midKey && biggestChildKey > -1) {
-              rightNode->childptr[i++] = leftNode->childptr[x];
-              leftNode->childptr[x] = nullptr;
-              break;
-            }
+          int y = degree;
+          while (leftNode->childptr[x]->keys[y] <= -1) y--;
+          biggestChildKey = leftNode->childptr[x]->keys[y];
+          // If biggestkey > midkey, then it belongs in the right node also
+          // delete that pointer from the left node
+          if (biggestChildKey > midKey && biggestChildKey > -1) {
+            rightNode->childptr[i++] = leftNode->childptr[x];
+            leftNode->childptr[x] = nullptr;
           }
         }
       }
@@ -208,13 +208,19 @@ class btree {
       // find the correct position to add the new array within the parent
       // childptr array, need to add middlekey first because we are using add at
       // leaf.
-
-      // add the middle key to the parent
-      for (int i = parent->size - 1; i >= 0; i--) {
-        if (parent->keys[i] < midKey && parent->size < degree - 1) {
-          parent->keys[i + 1] = midKey;
-          break;
+      if (parent != nullptr) {
+        // add the middle key to the parent
+        for (int i = parent->size - 1; i >= 0; i--) {
+          if (parent->keys[i] < midKey && parent->size < degree - 1) {
+            parent->keys[i + 1] = midKey;
+            break;
+          }
         }
+      } else {
+        // Create a new parent
+        parent = new node(degree);
+        // Add midKey to parent
+        parent->keys[0] = midKey;
       }
 
       // Add the keys from the left and right nodes to the parent through
@@ -243,24 +249,25 @@ class btree {
       parent->keys[i] = midKey;
       parent->size++;
 
-      if (parent->size < 2) {
-        int j = degree;
-        while (parent->childptr[j] == nullptr && j != 0) {
-          j--;
-        }
+      int j = degree;
+      while (parent->childptr[j] == nullptr && j != 0) {
+        j--;
+      }
 
-        parent->childptr[j + 1] = rightNode;
-      } else {
-        for (int i = 0; i < degree; i++) {
-          if (rightNode->childptr[i] != nullptr) {
-            for (int x = 0; x < degree; x++)
-              if (rightNode->childptr[i]->keys[x] > -1) {
-                addAtLeaf(parent->parentptr, parent,
-                          rightNode->childptr[i]->keys[x]);
-              }
-          }
+      parent->childptr[j + 1] = rightNode;
+
+      for (int i = 0; i < degree; i++) {
+        if (rightNode->childptr[i] != nullptr) {
+          for (int x = 0; x < degree; x++)
+            if (rightNode->childptr[i]->keys[x] > -1) {
+              addAtLeaf(parent->parentptr, parent,
+                        rightNode->childptr[i]->keys[x]);
+            }
         }
       }
+
+      // If the parent is full, call splitChild on the parent
+      if (parent->size == degree) splitChild(parent->parentptr, parent);
     }
   }
 
