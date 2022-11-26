@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
   cout << "Height=" << b.getHeight() << endl;
   for (auto l : levels) {
-    b.printLevel(l, cout);
+    // b.printLevel(l, cout);
     cout << endl;
   }
 
