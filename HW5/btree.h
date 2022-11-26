@@ -46,19 +46,6 @@ class btree {
   node *root;
   int degree;
 
-  void printChildptr(node *n, ostream &out) {
-    for (int i = 0; i < degree; i++) {
-      if (n->childptr[i] != nullptr)
-        for (int x = 0; x < n->childptr[i]->keys.size(); x++) {
-          if (n->childptr[i]->keys[x] != -1)
-            out << n->childptr[i]->keys[x] << " ";
-          else {
-            break;
-          }
-        }
-    }
-  }
-
   void printLevel(node *n, int level, ostream &out) {
     if (n == nullptr) return;
     if (level == 1) {
@@ -120,29 +107,6 @@ class btree {
       if (data < n->keys[i] || n->keys[i] == -1) return i;
     }
     return -1;
-  }
-
-  void findChildInsertion(node *leftNode, node *rightNode, int midKey) {
-    // for(int x = 0; x < degree; x++)
-    // {
-    //   if(leftNode->childptr.at(x)->keys.at(x) )
-    // }
-
-    //  int i = 0;
-    //   for (int x = 0; x < degree; x++) {
-    //     int biggestChildKey = -1;
-    //     if (leftNode->childptr[x] != nullptr) {
-    //       int y = degree;
-    //       while (leftNode->childptr[x]->keys[y] == -1) y--;
-    //       biggestChildKey = leftNode->childptr[x]->keys[y];
-    //       // If biggestkey > midkey, then it belongs in the right node also
-    //       // delete that pointer from the left node
-    //       if (biggestChildKey > midKey && biggestChildKey > -1) {
-    //         while (x < degree) rightNode->childptr[i++] =
-    //         leftNode->childptr[x]; leftNode->childptr[x++] = nullptr;
-    //       }
-    //     }
-    //   }
   }
 
   // Helper function to add the midKey to the parent and add the children to the
@@ -242,29 +206,13 @@ class btree {
 
     // If passed node (leftNode) is not a leaf, copy the pointers to rightNode
     if (!leftNode->leaf) {
-      // For each child in passed node, check the children's key values to see
-      // if it belongs in left or right node
+      // If not a leaf, has children, using the middle index, transfer bigger
+      // children to rightNode from leftNode
       int x = 0;
       for (auto i = mid + 1; i < degree + 1; i++) {
         rightNode->childptr.at(x++) = leftNode->childptr.at(i);
         leftNode->childptr.at(i) = nullptr;
       }
-
-      // int i = 0;
-      // for (int x = 0; x < degree; x++) {
-      //   int biggestChildKey = -1;
-      //   if (leftNode->childptr[x] != nullptr) {
-      //     int y = degree;
-      //     while (leftNode->childptr[x]->keys[y] == -1) y--;
-      //     biggestChildKey = leftNode->childptr[x]->keys[y];
-      //     // If biggestkey > midkey, then it belongs in the right node also
-      //     // delete that pointer from the left node
-      //     if (biggestChildKey > midKey && biggestChildKey > -1) {
-      //       while (x < degree) rightNode->childptr[i++] =
-      //       leftNode->childptr[x]; leftNode->childptr[x++] = nullptr;
-      //     }
-      //   }
-      // }
 
       // copy half the pointer of the left node to the right node
       /* --------------------- Done Above --------------------- */

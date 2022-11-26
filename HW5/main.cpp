@@ -27,12 +27,12 @@ int main(int argc, char *argv[]) {
   while (input.peek() != EOF) {
     int i;
     input >> i;
-    keys.push_back(i);
+    if (find(keys.begin(), keys.end(), i) == keys.end()) keys.push_back(i);
   }
 
   // Deleting duplicate values before inputting to BTree
-  sort(keys.begin(), keys.end());
-  keys.erase(unique(keys.begin(), keys.end()), keys.end());
+  // sort(keys.begin(), keys.end());
+  // keys.erase(unique(keys.begin(), keys.end()), keys.end());
 
   for (auto k : keys) cout << k << " ";
   cout << endl;
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
   cout << "Height=" << b.getHeight() << endl;
   for (auto l : levels) {
-    // b.printLevel(l, cout);
+    b.printLevel(l, cout);
     cout << endl;
   }
 
