@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <string>
 #include <vector>
 
@@ -47,18 +48,20 @@ class btree {
   int degree;
 
   void printLevel(node *n, int level, ostream &out) {
-    if (n == nullptr) return;
-    if (level == 1) {
-      int i = 0;
-      while (n->keys[i] != -1) out << n->keys[i] << " ", i++;
-    }
+    // if (n == nullptr) return;
+    // if (level == 1) {
+    //   int i = 0;
+    //   while (n->keys[i] != -1) out << n->keys[i] << " ", i++;
+    // }
 
-    else if (level > 1) {
-      for (int i = 0; i < degree; i++) {
-        if (n->childptr[i] != nullptr)
-          printLevel(n->childptr[i], level - 1, out);
-      }
-    }
+    // else if (level > 1) {
+    //   for (int i = 0; i < degree; i++) {
+    //     if (n->childptr[i] != nullptr)
+    //       printLevel(n->childptr[i], level - 1, out);
+    //   }
+    // }
+
+    for (int i = 0; i < n->size; i++) out << n->keys[i] << " ";
   }
 
   int getHeight(node *n, int level) {
@@ -109,6 +112,26 @@ class btree {
     return -1;
   }
 
+  // Helper function to insert childptrs into the parent node when the slot is
+  // not occupied by -1
+  void validateChildren(node *parent, node *leftNode, node *rightNode,
+                        int index) {
+    parent->keys.insert(parent->keys.begin(), index);
+    parent->size++;
+    parent->keys.erase(remove(parent->keys.begin(), parent->keys.end(), -1),
+                       parent->keys.end());
+    while (parent->size < degree) parent->keys.push_back(-1);
+
+    if (parent->childptr.at(index) != leftNode)
+      parent->childptr.insert(parent->childptr.begin() + index, leftNode);
+    parent->childptr.insert(parent->childptr.begin() + index + 1, rightNode);
+    parent->childptr.erase(
+        remove(parent->childptr.begin(), parent->childptr.end(), nullptr),
+        parent->childptr.end());
+    while (parent->childptr.size() < degree + 1)
+      parent->childptr.push_back(nullptr);
+  }
+
   // Helper function to add the midKey to the parent and add the children to the
   // parent without affecting the parent's other children. (Does not check for
   // if the parent is full)
@@ -119,8 +142,13 @@ class btree {
     for (i = 0; i < degree - 1; i++)
       if (parent->keys.at(i) > midKey || parent->keys.at(i) == -1) break;
 
-    parent->keys.at(i) = midKey;
-    parent->size++;
+    // If the slot is empty in parent, insert
+    if (parent->keys.at(i) == -1) parent->keys.at(i) = midKey, parent->size++;
+    // If the slot is not empty, call validate children to insert the left and
+    // right nodes
+    else
+      validateChildren(parent, leftNode, rightNode, i);
+
     if (parent == root) cout << "Added to root: " << parent->keys[i] << endl;
     // Insert the leftNode at the correct position based on the index that the
     // midKey was added
@@ -128,6 +156,8 @@ class btree {
     parent->childptr.at(i + 1) = rightNode;
 
     parent->leaf = false;
+
+    if (parent->parentptr == nullptr) root = parent;
 
     leftNode->parentptr = rightNode->parentptr = parent;
   }
@@ -186,7 +216,6 @@ class btree {
   void splitChild(node *parent, node *leftNode) {
     // Passed as left, so create right node
     node *rightNode = new node(degree);
-    node *newParent = new node(degree);
     int mid = (degree - 1) / 2;
 
     int midKey = leftNode->keys[mid];
@@ -220,6 +249,7 @@ class btree {
       // find the correct position to add the new array within the parent
       // childptr array, need to add middlekey first because we are using add
       // at leaf.
+
       if (parent == nullptr) {
         // Create a new parent
         parent = new node(degree);
@@ -234,12 +264,12 @@ class btree {
       // add the middle key to the parent and add the left and right nodes as
       // children
       addChildptrToParent(parent, leftNode, rightNode, midKey);
-
     }
 
     else if (leftNode->leaf) {
       // If passed node (leftNode) is a leaf, send the middle key to the
       // parent
+
       addChildptrToParent(parent, leftNode, rightNode, midKey);
 
       // If the parent is full, call splitChild on the parent

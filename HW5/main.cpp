@@ -34,7 +34,9 @@ int main(int argc, char *argv[]) {
   // sort(keys.begin(), keys.end());
   // keys.erase(unique(keys.begin(), keys.end()), keys.end());
 
-  for (auto k : keys) cout << k << " ";
+  int i = 0;
+  for (auto k : keys)
+    i++ % 5 == 0 && i > 2 ? cout << k << endl : cout << k << " ";
   cout << endl;
 
   string s = "";
