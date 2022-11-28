@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
   // ifstream cmd(am.get("command"));
   // ofstream out(am.get("output"));
 
-  ifstream input("input2.txt");
-  ifstream cmd("command2.txt");
+  ifstream input("input3.txt");
+  ifstream cmd("command3.txt");
   ofstream out("output1.txt");
 
   vector<int> keys, levels;
@@ -29,15 +29,6 @@ int main(int argc, char *argv[]) {
     input >> i;
     if (find(keys.begin(), keys.end(), i) == keys.end()) keys.push_back(i);
   }
-
-  // Deleting duplicate values before inputting to BTree
-  // sort(keys.begin(), keys.end());
-  // keys.erase(unique(keys.begin(), keys.end()), keys.end());
-
-  int i = 0;
-  for (auto k : keys)
-    i++ % 5 == 0 && i > 2 ? cout << k << endl : cout << k << " ";
-  cout << endl;
 
   string s = "";
   while (cmd.peek() != EOF) {
@@ -60,10 +51,10 @@ int main(int argc, char *argv[]) {
 
   for (auto k : keys) b.insert(k);
 
-  cout << "Height=" << b.getHeight() << endl;
+  out << "Height=" << b.getHeight() << endl;
   for (auto l : levels) {
-    b.printLevel(l, cout);
-    cout << endl;
+    b.printLevel(l, out);
+    out << endl;
   }
 
   return 0;

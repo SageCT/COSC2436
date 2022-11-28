@@ -48,20 +48,20 @@ class btree {
   int degree;
 
   void printLevel(node *n, int level, ostream &out) {
-    // if (n == nullptr) return;
-    // if (level == 1) {
-    //   int i = 0;
-    //   while (n->keys[i] != -1) out << n->keys[i] << " ", i++;
-    // }
+    if (n == nullptr) return;
+    if (level == 1) {
+      int i = 0;
+      while (n->keys[i] != -1) out << n->keys[i] << " ", i++;
+    }
 
-    // else if (level > 1) {
-    //   for (int i = 0; i < degree; i++) {
-    //     if (n->childptr[i] != nullptr)
-    //       printLevel(n->childptr[i], level - 1, out);
-    //   }
-    // }
+    else if (level > 1) {
+      for (int i = 0; i < degree; i++) {
+        if (n->childptr[i] != nullptr)
+          printLevel(n->childptr[i], level - 1, out);
+      }
+    }
 
-    for (int i = 0; i < n->size; i++) out << n->keys[i] << " ";
+    // for (int i = 0; i < n->size; i++) out << n->keys[i] << " ";
   }
 
   int getHeight(node *n, int level) {
@@ -120,11 +120,15 @@ class btree {
     parent->size++;
     parent->keys.erase(remove(parent->keys.begin(), parent->keys.end(), -1),
                        parent->keys.end());
-    while (parent->size < degree) parent->keys.push_back(-1);
+    while (parent->keys.size() < degree) parent->keys.push_back(-1);
+
+    leftNode->parentptr = parent;
+    rightNode->parentptr = parent;
 
     if (parent->childptr.at(index) != leftNode)
       parent->childptr.insert(parent->childptr.begin() + index, leftNode);
     parent->childptr.insert(parent->childptr.begin() + index + 1, rightNode);
+
     parent->childptr.erase(
         remove(parent->childptr.begin(), parent->childptr.end(), nullptr),
         parent->childptr.end());
@@ -159,7 +163,10 @@ class btree {
 
     if (parent->parentptr == nullptr) root = parent;
 
-    leftNode->parentptr = rightNode->parentptr = parent;
+    leftNode->parentptr = parent;
+    rightNode->parentptr = parent;
+    if (leftNode->childptr[0] != nullptr) leftNode->leaf = false;
+    if (rightNode->childptr[0] != nullptr) rightNode->leaf = false;
   }
 
   // Adds the new node into the tree at first available leaf,
@@ -189,10 +196,7 @@ class btree {
       while (!temp->leaf && findInsertion(temp, data) != -1) {
         temp = temp->childptr[findInsertion(temp, data)];
       }
-      if (!temp->leaf)
-        addAtNonLeaf(temp->parentptr, temp, data);
-      else
-        addAtLeaf(temp->parentptr, temp, data);
+      addAtLeaf(temp->parentptr, temp, data);
     }
 
     // Need to determine if node is a leaf within splitChild() if it is, then
@@ -213,31 +217,6 @@ class btree {
         splitChild(parent, n);
       }
     }
-  }
-
-  void addAtNonLeaf(node *parent, node *n, int data) {
-    //   int i = n->size;
-    //   // Find the first spot where data is less than keys[i - 1]
-    //   while (i != 0 && data < n->keys[i - 1]) {
-    //     // Pointer of arrays can change size dynamically
-    //     n->keys[i] = n->keys[i - 1];
-    //     i--;
-    //   }
-    //   // Based off that index, change the childptrs to the correct position
-    //   // Find the first spot where data is less than keys[i - 1]
-    //   int j = n->size;
-
-    //   while (j != 0 && data < n->keys[j - 1]) {
-    //     // Pointer of arrays can change size dynamically
-    //     n->keys[j] = n->keys[j - 1];
-    //     i--;
-    //   }
-
-    //   // Add data to the node where data is greater than array at index
-    //   cout << "Adding " << data << " to index " << i << endl;
-    //   n->keys[i] = data;
-    //   n->parentptr = parent;
-    //   n->size++;
   }
 
   // n is a full child, split it into two children with parent as the new
@@ -263,13 +242,17 @@ class btree {
     leftNode->keys[mid] = -1;
     leftNode->size--;
 
+    leftNode->parentptr = parent;
+    rightNode->parentptr = parent;
+
     // If passed node (leftNode) is not a leaf, copy the pointers to rightNode
     if (!leftNode->leaf) {
       // If not a leaf, has children, using the middle index, transfer bigger
       // children to rightNode from leftNode
       int x = 0;
-      for (auto i = mid + 1; i < degree + 1; i++) {
-        rightNode->childptr.at(x++) = leftNode->childptr.at(i);
+      for (int i = mid + 1; i < degree + 1; i++) {
+        rightNode->childptr.at(x) = leftNode->childptr.at(i);
+        rightNode->childptr.at(x++)->parentptr = rightNode;
         leftNode->childptr.at(i) = nullptr;
       }
 
@@ -287,6 +270,8 @@ class btree {
         parent->leaf = false;
         parent->childptr[0] = leftNode;
         parent->childptr[1] = rightNode;
+        leftNode->parentptr = parent;
+        rightNode->parentptr = parent;
         parent->parentptr = nullptr;
         root = parent;
       }
@@ -294,6 +279,10 @@ class btree {
       // add the middle key to the parent and add the left and right nodes as
       // children
       addChildptrToParent(parent, leftNode, rightNode, midKey);
+
+      // If the parent is full, split the parent
+      if (parent->size == degree) splitChild(parent->parentptr, parent);
+
     }
 
     else if (leftNode->leaf) {
