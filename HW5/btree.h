@@ -115,8 +115,8 @@ class btree {
   // Helper function to insert childptrs into the parent node when the slot is
   // not occupied by -1
   void validateChildren(node *parent, node *leftNode, node *rightNode,
-                        int index) {
-    parent->keys.insert(parent->keys.begin(), index);
+                        int index, int midKey) {
+    parent->keys.insert(parent->keys.begin() + index, midKey);
     parent->size++;
     parent->keys.erase(remove(parent->keys.begin(), parent->keys.end(), -1),
                        parent->keys.end());
@@ -147,7 +147,7 @@ class btree {
     // If the slot is not empty, call validate children to insert the left and
     // right nodes
     else
-      validateChildren(parent, leftNode, rightNode, i);
+      validateChildren(parent, leftNode, rightNode, i, midKey);
 
     if (parent == root) cout << "Added to root: " << parent->keys[i] << endl;
     // Insert the leftNode at the correct position based on the index that the
@@ -189,7 +189,10 @@ class btree {
       while (!temp->leaf && findInsertion(temp, data) != -1) {
         temp = temp->childptr[findInsertion(temp, data)];
       }
-      addAtLeaf(temp->parentptr, temp, data);
+      if (!temp->leaf)
+        addAtNonLeaf(temp->parentptr, temp, data);
+      else
+        addAtLeaf(temp->parentptr, temp, data);
     }
 
     // Need to determine if node is a leaf within splitChild() if it is, then
@@ -202,12 +205,39 @@ class btree {
         temp->childptr[0] = n;
         temp->size = 0;
         splitChild(temp, n);
-        cout << "Root is now: " << temp->keys[0] << endl;
+        cout << "Root is now: ";
+        printLevel(1, cout);
+        cout << endl;
         root = temp;
       } else {
         splitChild(parent, n);
       }
     }
+  }
+
+  void addAtNonLeaf(node *parent, node *n, int data) {
+    //   int i = n->size;
+    //   // Find the first spot where data is less than keys[i - 1]
+    //   while (i != 0 && data < n->keys[i - 1]) {
+    //     // Pointer of arrays can change size dynamically
+    //     n->keys[i] = n->keys[i - 1];
+    //     i--;
+    //   }
+    //   // Based off that index, change the childptrs to the correct position
+    //   // Find the first spot where data is less than keys[i - 1]
+    //   int j = n->size;
+
+    //   while (j != 0 && data < n->keys[j - 1]) {
+    //     // Pointer of arrays can change size dynamically
+    //     n->keys[j] = n->keys[j - 1];
+    //     i--;
+    //   }
+
+    //   // Add data to the node where data is greater than array at index
+    //   cout << "Adding " << data << " to index " << i << endl;
+    //   n->keys[i] = data;
+    //   n->parentptr = parent;
+    //   n->size++;
   }
 
   // n is a full child, split it into two children with parent as the new
