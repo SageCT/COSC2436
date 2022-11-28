@@ -87,6 +87,13 @@ class btree {
 
   int getHeight() { return 1 + getHeight(root, 0); }
 
+  void printLevel(int level, ostream &out) {
+    if (getHeight() < level)
+      out << "Empty";
+    else
+      printLevel(root, level, out);
+  }
+
   // Inserts a node into the B-tree, if root is NOT nullptr, adds at leaf
   void insert(int data) {
     if (root == nullptr) {
@@ -104,9 +111,8 @@ class btree {
   // the node
   int findInsertion(node *n, int data) {
     if (n == nullptr) return 0;
-    for (int i = 0; i <= n->size; i++) {
+    for (int i = 0; i <= n->size; i++)
       if (data < n->keys[i] || n->keys[i] == -1) return i;
-    }
     return -1;
   }
 
@@ -191,9 +197,9 @@ class btree {
     // leaf
     else if (findInsertion(n, data) != -1) {
       node *temp = n;
-      while (!temp->leaf && findInsertion(temp, data) != -1) {
+      while (!temp->leaf && findInsertion(temp, data) != -1)
         temp = temp->childptr[findInsertion(temp, data)];
-      }
+
       addAtLeaf(temp->parentptr, temp, data);
     }
 
@@ -211,9 +217,8 @@ class btree {
         printLevel(1, cout);
         cout << endl;
         root = temp;
-      } else {
+      } else
         splitChild(parent, n);
-      }
     }
   }
 
@@ -292,13 +297,6 @@ class btree {
       // If the parent is full, call splitChild on the parent
       if (parent->size == degree) splitChild(parent->parentptr, parent);
     }
-  }
-
-  void printLevel(int level, ostream &out) {
-    if (getHeight() < level)
-      out << "Empty";
-    else
-      printLevel(root, level, out);
   }
 };
 
