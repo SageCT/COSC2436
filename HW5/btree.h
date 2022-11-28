@@ -88,7 +88,7 @@ class btree {
   int getHeight() { return 1 + getHeight(root, 0); }
 
   void printLevel(int level, ostream &out) {
-    if (getHeight() < level)
+    if (getHeight() < level && level > 0)
       out << "Empty";
     else
       printLevel(root, level, out);
