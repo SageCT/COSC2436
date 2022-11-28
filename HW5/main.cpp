@@ -10,14 +10,14 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  // ArgumentManager am(argc, argv);
-  // ifstream input(am.get("input"));
-  // ifstream cmd(am.get("command"));
-  // ofstream out(am.get("output"));
+  ArgumentManager am(argc, argv);
+  ifstream input(am.get("input"));
+  ifstream cmd(am.get("command"));
+  ofstream out(am.get("output"));
 
-  ifstream input("input3.txt");
-  ifstream cmd("command3.txt");
-  ofstream out("output1.txt");
+  // ifstream input("input2.txt");
+  // ifstream cmd("command2.txt");
+  // ofstream out("output1.txt");
 
   vector<int> keys, levels;
 

@@ -60,8 +60,6 @@ class btree {
           printLevel(n->childptr[i], level - 1, out);
       }
     }
-
-    // for (int i = 0; i < n->size; i++) out << n->keys[i] << " ";
   }
 
   int getHeight(node *n, int level) {
@@ -87,7 +85,7 @@ class btree {
     degree = _degree;
   }
 
-  int getHeight() { return getHeight(root, 0); }
+  int getHeight() { return 1 + getHeight(root, 0); }
 
   // Inserts a node into the B-tree, if root is NOT nullptr, adds at leaf
   void insert(int data) {
@@ -296,7 +294,12 @@ class btree {
     }
   }
 
-  void printLevel(int level, ostream &out) { printLevel(root, level, out); }
+  void printLevel(int level, ostream &out) {
+    if (getHeight() < level)
+      out << "Empty";
+    else
+      printLevel(root, level, out);
+  }
 };
 
 #endif
