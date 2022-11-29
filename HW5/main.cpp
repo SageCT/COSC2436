@@ -10,18 +10,18 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  // ArgumentManager am(argc, argv);
-  // ifstream input(am.get("input"));
-  // ifstream cmd(am.get("command"));
-  // ofstream out(am.get("output"));
+  ArgumentManager am(argc, argv);
+  ifstream input(am.get("input"));
+  ifstream cmd(am.get("command"));
+  ofstream out(am.get("output"));
 
-  ifstream input("input2.txt");
-  ifstream cmd("command2.txt");
-  ofstream out("output1.txt");
+  // ifstream input("input2.txt");
+  // ifstream cmd("command2.txt");
+  // ofstream out("output1.txt");
 
   vector<int> keys, levels;
 
-  int degree;
+  int degree = -1;
 
   // Taking inputs from the input file
   while (input.peek() != EOF) {
@@ -46,16 +46,17 @@ int main(int argc, char *argv[]) {
       levels.push_back(stoi(s.substr(s.find(" ") + 1)));
   }
 
-  // btree b(degree);
-  btree b(degree);
+  if (degree != -1) {
+    btree b(degree);
 
-  for (auto k : keys) b.insert(k);
+    for (auto k : keys) b.insert(k);
 
-  out << "Height=" << b.getHeight() << endl;
+    out << "Height=" << b.getHeight() << endl;
 
-  for (auto l : levels) {
-    b.printLevel(l, out);
-    out << endl;
+    for (auto l : levels) {
+      b.printLevel(l, out);
+      out << endl;
+    }
   }
 
   return 0;
