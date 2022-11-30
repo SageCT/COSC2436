@@ -30,15 +30,6 @@ struct node {
     for (int i = 0; i < degree + 1; i++) childptr[i] = nullptr;
   }
 
-  node(node *parent, int degree) {
-    parentptr = parent;
-    leaf = true;
-    size = 0;
-
-    for (int i = 0; i < degree; i++) keys[i] = -1;
-    for (int i = 0; i < degree + 1; i++) childptr[i] = nullptr;
-  }
-
   friend class btree;
 };
 
@@ -85,7 +76,12 @@ class btree {
     degree = _degree;
   }
 
-  int getHeight() { return 1 + getHeight(root, 0); }
+  int getHeight() {
+    if (getHeight(root, 0) > 0)
+      return getHeight(root, 0) + 1;
+    else
+      return 0;
+  }
 
   void printLevel(int level, ostream &out) {
     if (getHeight() < level && level > 0)
@@ -279,19 +275,18 @@ class btree {
         root = parent;
       }
 
-      // add the middle key to the parent and add the left and right nodes as
+      // Add the middle key to the parent and add the left and right nodes as
       // children
       addChildptrToParent(parent, leftNode, rightNode, midKey);
 
-      // If the parent is full, split the parent
+      // If the parent is full, call splitChild on the parent
       if (parent->size == degree) splitChild(parent->parentptr, parent);
 
     }
 
     else if (leftNode->leaf) {
-      // If passed node (leftNode) is a leaf, send the middle key to the
-      // parent
-
+      // Add the middle key to the parent and left and right nodes as children
+      // of the parent
       addChildptrToParent(parent, leftNode, rightNode, midKey);
 
       // If the parent is full, call splitChild on the parent
