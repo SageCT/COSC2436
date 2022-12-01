@@ -1,9 +1,0 @@
---- ans8.txt	2022-11-30 10:02:57.988808600 -0600
-+++ output8.txt	2022-11-30 10:08:52.068940700 -0600
-@@ -1,3 +1,3 @@
--Height=1
--2147483647
-+Height=0
-+Empty
- Empty
-\ No newline at end of file

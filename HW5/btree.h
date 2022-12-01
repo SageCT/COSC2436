@@ -77,8 +77,8 @@ class btree {
   }
 
   int getHeight() {
-    if (getHeight(root, 0) > 0)
-      return getHeight(root, 0) + 1;
+    if (root != nullptr)
+      return getHeight(root, 1);
     else
       return 0;
   }
@@ -210,7 +210,7 @@ class btree {
         temp->size = 0;
         splitChild(temp, n);
         cout << "Root is now: ";
-        printLevel(1, cout);
+        printLevel(0, cout);
         cout << endl;
         root = temp;
       } else
@@ -229,7 +229,8 @@ class btree {
     int midKey = leftNode->keys[mid];
 
     // copy half of left node to right node
-    for (int x = 0; x < leftNode->size - mid; x++) {
+    int index = leftNode->size - mid - 1;
+    for (int x = 0; x < index; x++) {
       rightNode->keys[x] = leftNode->keys[x + mid + 1];
       rightNode->size++;
 
@@ -250,9 +251,12 @@ class btree {
       // children to rightNode from leftNode
       int x = 0;
       for (int i = mid + 1; i < degree + 1; i++) {
-        rightNode->childptr.at(x) = leftNode->childptr.at(i);
-        rightNode->childptr.at(x++)->parentptr = rightNode;
-        leftNode->childptr.at(i) = nullptr;
+        if (leftNode->childptr.at(i) != nullptr) {
+          rightNode->childptr.at(x) = leftNode->childptr.at(i);
+          rightNode->childptr.at(x)->parentptr = rightNode;
+          leftNode->childptr.at(i) = nullptr;
+          x++;
+        }
       }
 
       // copy half the pointer of the left node to the right node

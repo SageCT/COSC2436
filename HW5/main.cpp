@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
   ifstream cmd(am.get("command"));
   ofstream out(am.get("output"));
 
-  // ifstream input("input2.txt");
-  // ifstream cmd("command2.txt");
+  // ifstream input("input4.txt");
+  // ifstream cmd("command4.txt");
   // ofstream out("output1.txt");
 
   vector<int> keys, levels;
@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     int i;
     input >> i;
     if (find(keys.begin(), keys.end(), i) == keys.end()) keys.push_back(i);
+    cout << i << endl;
   }
 
   string s = "";
