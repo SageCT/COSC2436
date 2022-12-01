@@ -1,0 +1,8 @@
+If you're looking for a job as a graphic designer, you'll need to have a portfolio.
+There are many different ways to create a portfolio, but the best way is to create a website.
+It should be a free site, so users can view your portfolio without having to pay.
+You can create a website with a CMS, like WordPress or Drupal. You can also create a site without a CMS, like Joomla, or simply make your own website with HTML.
+"Hello, World" is often the first program of any new computer user.
+This program was originally a terminal program that displayed the first line of a text file, and the text "Hello, World!" to any computer user who typed in the command.
+The computer user was able to see this text on the screen because the computer terminal was connected to a computer monitor.
+The terminal program was replaced later by graphical user interfaces.

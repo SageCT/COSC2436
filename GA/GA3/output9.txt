@@ -1,0 +1,11 @@
+[x] 19
+[xl] 15
+[xll] 10
+[xlll] 9
+[xllr] 12
+[xlr] 17
+[xlrl] 16
+[xlrr] 18
+[xr] 21
+[xrl] 20
+[xrr] 24

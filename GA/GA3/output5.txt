@@ -1,0 +1,7 @@
+[x] 7
+[xl] 6
+[xll] 5
+[xlll] 4
+[xllll] 3
+[xlllll] 2
+[xllllll] 1

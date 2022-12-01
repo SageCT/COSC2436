@@ -1,0 +1,84 @@
+int
+head
+113
+remove head
+109
+remove tail
+143
+remove tail
+remove tail
+remove tail
+64
+remove tail
+remove head
+remove head
+65
+remove tail
+remove head
+6
+remove head
+140
+28
+128
+112
+78
+remove head
+remove head
+remove head
+37
+9
+remove head
+remove tail
+remove tail
+46
+remove tail
+remove tail
+64
+82
+remove head
+108
+remove tail
+144
+remove head
+94
+remove head
+remove tail
+remove head
+remove tail
+remove tail
+146
+55
+remove tail
+17
+110
+remove head
+remove tail
+remove tail
+16
+remove head
+53
+14
+remove head
+89
+remove head
+142
+remove tail
+35
+remove head
+remove tail
+remove head
+79
+54
+remove tail
+remove head
+remove head
+103
+81
+remove head
+61
+remove tail
+48
+remove tail
+17
+remove tail
+139

@@ -70,12 +70,12 @@ int digitHere(string s) {
 }
 
 int main(int argc, char *argv[]) {
-  //   ArgumentManager am(argc, argv);
-  //   ifstream input(am.get("input"));
-  //   ofstream output(am.get("output"));
+  ArgumentManager am(argc, argv);
+  ifstream input(am.get("input"));
+  ofstream output(am.get("output"));
 
-  ifstream input("input3.txt");
-  ofstream output("output1.txt");
+  // ifstream input("input3.txt");
+  // ofstream output("output1.txt");
 
   string in = "";
   if (input.peek() != EOF) {

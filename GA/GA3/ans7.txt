@@ -1,0 +1,10 @@
+[x] 53
+[xl] 23
+[xll] 20
+[xlll] 18
+[xllll] 15
+[xlllll] 8
+[xllllll] 2
+[xlllllr] 11
+[xr] 74
+[xrl] 65

@@ -39,8 +39,6 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    // Insert the words into a map, with the word as the key
-    // If the word already exists, increment the integer value
     for (auto w : words) {
       if (wordMap.find(w) == wordMap.end()) {
         wordMap.insert(pair<string, int>(w, 1));
@@ -50,7 +48,6 @@ int main(int argc, char *argv[]) {
         wordMap.insert(pair<string, int>(w, num));
       }
     }
-    // output the word and its frequency, separated by a colon and a space
     for (auto itr = wordMap.begin(); itr != wordMap.end(); itr++) {
       itr == --wordMap.end()
           ? output << itr->first << ": " << itr->second

@@ -1,0 +1,66 @@
+char
+head
+m
+remove head
+e
+z
+remove tail
+f
+remove head
+remove tail
+b
+x
+remove tail
+remove head
+q
+k
+n
+r
+remove head
+v
+e
+u
+remove tail
+k
+remove head
+j
+remove tail
+remove tail
+c
+remove tail
+e
+m
+e
+d
+g
+remove tail
+remove head
+j
+remove tail
+e
+k
+remove tail
+remove tail
+remove tail
+t
+remove tail
+s
+remove tail
+m
+c
+p
+remove head
+remove tail
+remove tail
+z
+remove head
+remove head
+u
+remove tail
+p
+remove tail
+t
+remove tail
+remove tail
+remove head
+h

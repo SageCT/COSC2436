@@ -1,0 +1,45 @@
+int
+tail
+remove tail
+15
+18
+51
+56
+65
+60
+80
+remove tail
+remove tail
+remove head
+remove tail
+46
+76
+remove head
+remove tail
+86
+68
+34
+remove head
+remove tail
+remove head
+95
+remove head
+98
+33
+remove head
+70
+remove tail
+97
+100
+52
+66
+remove tail
+85
+remove tail
+remove head
+remove tail
+59
+19
+20
+1
+0

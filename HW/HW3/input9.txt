@@ -1,0 +1,4 @@
+3 3
+X B X
+B O B
+X B X
