@@ -8,7 +8,8 @@
 
 using namespace std;
 
-int priority(char c) {
+int priority(char c)
+{
   if (c == '/' || c == '*')
     return 2;
   else if (c == '+' || c == '-')
@@ -17,12 +18,15 @@ int priority(char c) {
     return 0;
 }
 
-string infixToPostfix(string s) {
+string infixToPostfix(string s)
+{
   stack<char> st;
   string postfix;
 
-  for (int i = 0; i < s.length(); i++) {
-    if (s[i] == ' ') {
+  for (int i = 0; i < s.length(); i++)
+  {
+    if (s[i] == ' ')
+    {
     }
 
     else if (isdigit(s[i]))
@@ -31,16 +35,20 @@ string infixToPostfix(string s) {
     else if (s[i] == '(')
       st.push('(');
 
-    else if (s[i] == ')') {
-      while (st.top() != '(') {
+    else if (s[i] == ')')
+    {
+      while (st.top() != '(')
+      {
         postfix += st.top();
         st.pop();
       }
       st.pop();
     }
 
-    else {
-      while (!st.empty() && priority(s[i]) <= priority(st.top())) {
+    else
+    {
+      while (!st.empty() && priority(s[i]) <= priority(st.top()))
+      {
         postfix += st.top();
         st.pop();
       }
@@ -48,7 +56,8 @@ string infixToPostfix(string s) {
     }
   }
 
-  while (!st.empty()) {
+  while (!st.empty())
+  {
     postfix += st.top();
     st.pop();
   }
@@ -56,43 +65,52 @@ string infixToPostfix(string s) {
   return postfix;
 }
 
-int evaluatePostfix(string s) {
+int evaluatePostfix(string s)
+{
   stack<int> st;
 
-  for (int i = 0; i < s.length(); i++) {
+  for (int i = 0; i < s.length(); i++)
+  {
     if (isdigit(s[i]))
       st.push(s[i] - '0');
-    else {
+    else
+    {
       int val1 = st.top();
       st.pop();
       int val2 = st.top();
       st.pop();
-      switch (s[i]) {
-        case '+':
-          st.push(val2 + val1);
-          break;
-        case '-':
-          st.push(val2 - val1);
-          break;
-        case '*':
-          st.push(val2 * val1);
-          break;
-        case '/':
-          st.push(val2 / val1);
-          break;
+      switch (s[i])
+      {
+      case '+':
+        st.push(val2 + val1);
+        break;
+      case '-':
+        st.push(val2 - val1);
+        break;
+      case '*':
+        st.push(val2 * val1);
+        break;
+      case '/':
+        st.push(val2 / val1);
+        break;
       }
     }
   }
   return st.top();
 }
 
-string postfixToInfix(string s) {
+string postfixToInfix(string s)
+{
   stack<string> st;
-  for (int i = 0; i < s.length(); i++) {
-    if (isdigit(s[i])) {
+  for (int i = 0; i < s.length(); i++)
+  {
+    if (isdigit(s[i]))
+    {
       string temp(1, s[i]);
       st.push(temp);
-    } else {
+    }
+    else
+    {
       string val1 = st.top();
       st.pop();
       string val2 = st.top();
@@ -103,11 +121,10 @@ string postfixToInfix(string s) {
   return st.top();
 }
 
-int main() {
-  string s;
-  cin >> s;
+int main()
+{
+  string s = "(2/4)*5+(6*7)";
   cout << endl;
-  cout << "Infix: " << postfixToInfix(s) << endl;
   cout << "Postfix: " << infixToPostfix(s) << endl;
   return 0;
 }
