@@ -64,9 +64,47 @@ string infixToPostfix(string s)
     return postfix;
 }
 
+double evaluatePostfix(string s)
+{
+    stack<double> st;
+
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (isdigit(s[i]))
+            st.push(s[i] - '0');
+        else
+        {
+            double val2 = st.top();
+            st.pop();
+
+            double val1 = st.top();
+            st.pop();
+
+            switch (s[i])
+            {
+            case '+':
+                st.push(val1 + val2);
+                break;
+            case '-':
+                st.push(val1 - val2);
+                break;
+            case '*':
+                st.push(val1 * val2);
+                break;
+            case '/':
+                st.push(val1 / val2);
+                break;
+            }
+        }
+    }
+    return st.top();
+}
+
 int main()
 {
     string s = "(2/4)*5+(6*7)";
-    cout << infixToPostfix(s) << endl;
+    s = infixToPostfix(s);
+    cout << "Pre-evaluation: " << s << endl;
+    cout << "Post-evaluation: " << evaluatePostfix(s) << endl;
     return 0;
 }
