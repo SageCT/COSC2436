@@ -371,6 +371,7 @@ void shellSort(int *arr, int size)
     }
   }
 }
+
 int main()
 {
   int arr[] = {40, 1, 12, 5, 3, 6, 3, 0, 2};
